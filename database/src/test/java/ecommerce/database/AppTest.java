@@ -3,9 +3,11 @@ package ecommerce.database;
 
 import static org.junit.Assert.assertEquals;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.annotations.SelectBeforeUpdate;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,25 +17,23 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import ecommerce.database.dao.CategoryDaoService;
 import ecommerce.database.dao.CustomerDaoService;
-import ecommerce.database.dao.ProductDaoService;
 import ecommerce.database.dao.SubCategoryDaoService;
 import ecommerce.database.dao.VendorAccountDaoService;
 import ecommerce.database.dao.VendorAddressDaoService;
 import ecommerce.database.dao.VendorDaoService;
+import ecommerce.database.dao.admin.AdminDao;
 import ecommerce.database.dao.products.LaptopDaoService;
 import ecommerce.database.dao.products.MobileDaoService;
-import ecommerce.database.daoImpl.VendorDaoImpl;
-import ecommerce.database.model.VendorAddress;
-import ecommerce.database.model.products.Laptop;
-import ecommerce.database.model.products.Mobile;
-import ecommerce.database.model.Category;
 import ecommerce.database.model.Customer;
 import ecommerce.database.model.Product;
 import ecommerce.database.model.SubCategory;
 import ecommerce.database.model.Vendor;
 import ecommerce.database.model.VendorAccountDetails;
+import ecommerce.database.model.VendorAddress;
+import ecommerce.database.model.admin.Admin;
+import ecommerce.database.model.products.Laptop;
+import ecommerce.database.model.products.Mobile;
 
 /**
  * Unit test for simple App.
@@ -56,7 +56,9 @@ public class AppTest {
 	private Mobile mobile;
     @Autowired
 	private Customer customer;
-	
+	@Autowired
+	private Admin admin;
+    
 	@Autowired
 	private VendorDaoService vendorDaoService;
 	@Autowired
@@ -71,36 +73,51 @@ public class AppTest {
 	private MobileDaoService mobileDaoService;
 	@Autowired
 	private CustomerDaoService customerDaoService;
+	@Autowired
+	private AdminDao adminDao;
 	
 	@Before
 	public void setUp()
 	{
 		AnnotationConfigApplicationContext annotationConfigApplicationContext= new AnnotationConfigApplicationContext(PersistenceConfig.class);
+	   vendor=new Vendor();
 	   vendor.setCompany_name("Nikhils Boutique");
 	   vendor.setVendor_name("Nikhil chandra");
 	   vendor.setVendor_mobile("8909768");
 	   vendor.setVendor_email("nikhilcg8@gmail.com");
 	   vendor.setVendor_password("12345");
-	
+	   
+	   
+	   vendorAddress=new VendorAddress();
 	   vendorAddress.setCity("hyderabad");
 	   vendorAddress.setColony("Raghavendra nagar");
 	   vendorAddress.setDoorNo("18-8-444/1/36");
 	   vendorAddress.setLandmark("near jhanda");
 	   vendorAddress.setState("Telengana State");
 	   vendorAddress.setStreet("rss");
-	  
+	   vendorAddress.setVendor(vendor);
+	   
+	   HashSet<VendorAddress> addresses=new HashSet<VendorAddress>();
+	   addresses.add(vendorAddress);
+	   
+	   vendor.setAddresses(addresses);
 	   
 		  
-	   
+	  vendorAccountDetails=new VendorAccountDetails();
 	  vendorAccountDetails.setAccount_number("123456");
 	  vendorAccountDetails.setBank_name("SBI");
 	  vendorAccountDetails.setBranch("Barkas");
 	  vendorAccountDetails.setName_in_account("Nikhil");
 	  vendorAccountDetails.setVendor(vendor);
+	  
+	  HashSet<VendorAccountDetails> accountDetails=new HashSet<VendorAccountDetails>();
+	  accountDetails.add(vendorAccountDetails);
+	  
+	  vendor.setAccountDetails(accountDetails);
 	
 
 	 
-	  
+	  laptop=new Laptop();
 	  laptop.setProduct_brand("Dell");
 	  laptop.setProduct_model("Inspiron 3000");
 	  short warranty=10;
@@ -114,17 +131,32 @@ public class AppTest {
 	  laptop.setLaptop_os("Windows 10");
 	  laptop.setLaptop_graphic_card(100);
 	  laptop.setLaptop_description("This is my lappy");
+	  laptop.setVendor(vendor);
 	  
 	  
+	  List<Product> products=new ArrayList<>();
+	  products.add(laptop);
+	  
+	  vendor.setProducts(products);
+	  
+	  admin.setEmail("admin@gmail.com");
+	  admin.setPassword("@12345");
 	 
+	}
+	
+	@Test
+	public void addAdmin()
+	{
+		assertEquals("Test add admin Failed",true,adminDao.addAdmin(admin));
+		deleteAdmin();
 	}
 
 	@Test
 	public void addCustomer()
 	{
-		vendorDaoService.addVendor(vendor);
+		//vendorDaoService.addVendor(vendor);
 		
-		customer.setCustomer_name("akhil");
+		  customer.setCustomer_name("akhil");
 		  customer.setCustomer_email("akhil@gmail.com");
 		  customer.setCustomer_mobile("098765422");
 		  customer.setCustomer_password("@12345");
@@ -142,15 +174,10 @@ public class AppTest {
 	public void getVendor()
 	{
 	    vendorDaoService.addVendor(vendor);
-	    vendorAccountDetails.setVendor(vendor);
-	    vendorAddress.setVendor(vendor);
-	    vendorAddressDaoService.addVendorAddress(vendorAddress);
-	    vendorAccountDaoService.addVendorAccount(vendorAccountDetails);	    
-	    long vendor_id=vendor.getVendor_id();
-	    assertEquals("Test Vendor Retrieval failed",vendor,vendorDaoService.getVendorById(vendor_id));
-	    deleteVendorAccount();
-	    deleteVendorAddress();
+	    assertEquals("Test getVendor Failed",vendor,vendorDaoService.getVendorByEmail(vendor.getVendor_email()));
 	}
+    
+   
 	@Test
 	public void updateVendor()
 	{
@@ -163,58 +190,63 @@ public class AppTest {
 	public void addVendorAddress()
 	{
 		vendorDaoService.addVendor(vendor);
-		 vendorAddress.setVendor(vendor);
-		assertEquals("Test Vendor Address Insertion Failed",true,vendorAddressDaoService.addVendorAddress(vendorAddress));
-		deleteVendorAddress();
+		//System.out.println(vendorAddress.getAddress_id());
+		VendorAddress vendorAddress1=new VendorAddress();
+		vendorAddress1.setLandmark("Hospital");
+		assertEquals("Test Vendor Address Insertion Failed",true,vendorAddressDaoService.addVendorAddress(vendorAddress1));
+		vendorAddressDaoService.deleteVendorAddress(vendorAddress1);
 	}
+	
 	
 	@Test
 	public void getVendorAddress()
 	{
 		vendorDaoService.addVendor(vendor);
-		vendorAddressDaoService.addVendorAddress(vendorAddress);
 		long address_id=vendorAddress.getAddress_id();
 		assertEquals("Test Vendor Address retrieval failed",vendorAddress,vendorAddressDaoService.getVendorAddress(address_id));
-		deleteVendorAddress();
+	
 	}
 	
 	@Test
 	public void updateVendorAddress()
 	{
 		vendorDaoService.addVendor(vendor);
-		vendorAddressDaoService.addVendorAddress(vendorAddress);
 		assertEquals("Test Vendor Address Update Failed",true,vendorAddressDaoService.editVendorAddress(vendorAddress));
-		deleteVendorAddress();
+		
 	}
 	
 	
 	@Test
 	public void addVendorAccount()
 	{
-		vendorDaoService.addVendor(vendor);
-		assertEquals("Test add Vendor Account Failed",true,vendorAccountDaoService.addVendorAccount(vendorAccountDetails));
-		deleteVendorAccount();
+		   vendorDaoService.addVendor(vendor);
+		   VendorAccountDetails accountDetails=new VendorAccountDetails();
+		   accountDetails.setAccount_number("86896545");
+		   accountDetails.setBranch("kachiguda");
+		   //assertEquals("updating testing",true,vendorAccountDaoService.editVendorAccount(vendorAccountDetails));
+		   assertEquals("testAddVendorAccount",true,vendorAccountDaoService.addVendorAccount(accountDetails));
+		   vendorAccountDaoService.deleteVendorAccount(accountDetails);
+		   
+		   
 	}
+	
 	
 	@Test
 	public void updateVendorAccount()
 	{
 		vendorDaoService.addVendor(vendor);
-		vendorAccountDetails.setVendor(vendor);
-		vendorAccountDaoService.addVendorAccount(vendorAccountDetails);
+		Set<VendorAccountDetails> accountDetails=vendor.getAccountDetails();
+		VendorAccountDetails vendorAccountDetails=accountDetails.iterator().next();
+		vendorAccountDetails.setBranch("Hyderguda");
 		assertEquals("Test Vendor Account updation failed",true,vendorAccountDaoService.editVendorAccount(vendorAccountDetails));
-        deleteVendorAccount();
 	}
 	
 	@Test
 	public void getVendorAccount()
 	{
 		vendorDaoService.addVendor(vendor);
-		vendorAccountDetails.setVendor(vendor);
-		vendorAccountDaoService.addVendorAccount(vendorAccountDetails);
 		long account_id=vendorAccountDetails.getAccount_id();
 		assertEquals("Test Vendor Account Retrieval failed",vendorAccountDetails,vendorAccountDaoService.getVendorAccountById(account_id));
-		deleteVendorAccount();
 	}
 	
 	@Test
@@ -238,31 +270,67 @@ public class AppTest {
 	@After
 	public void deleteAll()
 	{
+		if(vendorDaoService.getVendorById(vendor.getVendor_id())!=null)
+		{
+			vendorDaoService.deleteVendor(vendor);
+		}
 		
 		
-		assertEquals("Test Delete Vendor Failed",true,vendorDaoService.deleteVendor(vendor));	
 		
+	}
+	
+	public void deleteAdmin()
+	{
+		if(adminDao.adminLogin(admin.getEmail(),admin.getPassword())!=null)
+		{
+			adminDao.deleteAdmin(admin);
+		}
 	}
 	
 	public void deleteVendorAddress()
 	{
-		vendorAddressDaoService.deleteVendorAddress(vendorAddress);	
+		if(vendorAddressDaoService.getVendorAddress(vendorAddress.getAddress_id())!=null)
+		{
+			vendorAddressDaoService.deleteVendorAddress(vendorAddress);
+		}
+			
 	}
 	
 	public void deleteVendorAccount()
 	{
-		vendorAccountDaoService.deleteVendorAccount(vendorAccountDetails);
+		if(vendorAccountDaoService.getVendorAccountById(vendorAccountDetails.getAccount_id())!=null)
+		{
+			vendorAccountDaoService.deleteVendorAccount(vendorAccountDetails);
+		}
+		
 	}
 	
 	public void deleteLaptop()
 	{
-		laptopDaoService.deleteLaptop(laptop);
+		if(laptopDaoService.retrieveLaptopById(laptop.getProductId())!=null)
+		{
+			laptopDaoService.deleteLaptop(laptop);
+		}
+		
 	}
 	
 	public void deleteCustomer()
 	{
-		customerDaoService.deleteCustomer(customer);
+		if(customerDaoService.getCustomerById(customer.getCustomer_id())!=null)
+		{
+			customerDaoService.deleteCustomer(customer);
+		}
+		
 	}
 	
+	
+/*	
+	@Test
+	public void testGetUser()
+	{
+		vendorDaoService.addVendor(vendor);
+		System.out.println(vendorDaoService.getVendorById(vendor.getVendor_id()));
+	}
+	*/
 	
 }

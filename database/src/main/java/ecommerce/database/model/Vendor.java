@@ -3,6 +3,7 @@ package ecommerce.database.model;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -37,19 +38,29 @@ public class Vendor {
 	private String vendor_mobile;
 	@Column(unique=true)
     private String company_name;
+	private boolean vendor_active;
     
-    @OneToMany(mappedBy="vendor",fetch=FetchType.EAGER)
+   
+	@OneToMany(mappedBy="vendor",fetch=FetchType.EAGER,cascade=CascadeType.ALL)
     private Set<VendorAddress> addresses;
     
-	@OneToMany(mappedBy="vendor",fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="vendor",fetch=FetchType.EAGER,cascade=CascadeType.ALL)
     private Set<VendorAccountDetails> accountDetails;
 	
-	@OneToMany(mappedBy="vendor",fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="vendor",fetch=FetchType.EAGER,cascade=CascadeType.ALL)
 	private List<Product> products;
 	
 	public long getVendor_id() {
 		return vendor_id;
 	}
+	
+	 public boolean getVendor_active() {
+			return vendor_active;
+		}
+		public void setVendor_active(boolean vendor_active) {
+			this.vendor_active = vendor_active;
+		}
+		
 	public Set<VendorAddress> getAddresses() {
 		return addresses;
 	}
@@ -96,8 +107,16 @@ public class Vendor {
 	public void setCompany_name(String company_name) {
 		this.company_name = company_name;
 	}
+	
+	
     
-	  @Override
+	  public List<Product> getProducts() {
+		return products;
+	}
+	public void setProducts(List<Product> products) {
+		this.products = products;
+	}
+	@Override
 		public String toString() {
 			return "Vendor [vendor_id=" + vendor_id + ", vendor_name=" + vendor_name + ", vendor_email=" + vendor_email
 					+ ", vendor_password=" + vendor_password + ", vendor_mobile=" + vendor_mobile + ", company_name="

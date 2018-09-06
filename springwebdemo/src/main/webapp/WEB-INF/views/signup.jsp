@@ -8,7 +8,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-<springform:form action="" method="POST" modelAttribute="vendor">
+<springform:form action="signup" method="POST" modelAttribute="vendor">
 <springform:input path="vendor_name"/>
 <springform:input path="vendor_email"/>
 <springform:input path="vendor_mobile"/>

@@ -37,6 +37,7 @@ public class VendorAccountDaoImpl implements VendorAccountDaoService{
 			return true;
 		} catch (HibernateException e) {
 			// TODO: handle exception
+			e.printStackTrace();
 			return false;
 		}
 		

@@ -23,6 +23,6 @@
        <td>Company:</td><td>${vendor.company_name}</td>
        </tr>
     </table>
-<h3><a href=""></a></h3>
+<h3><a href="editvendor">Edit</a></h3>
 </body>
 </html>

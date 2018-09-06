@@ -11,11 +11,11 @@
 
 This is Login Page.
 
-<springform:form action="login" method="POST" modelAttribute="vendor">
-<springform:input path="vendor_email"/>
-<springform:input path="vendor_password"/>
+<form action="login" method="POST" >
+<input type="email"  name="email"/>
+<input type="password"  name="password"/>
 <input type="submit">
-</springform:form>
+</form>
 
 </body>
 </html>
