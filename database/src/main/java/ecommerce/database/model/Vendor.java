@@ -13,6 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import org.hibernate.annotations.OnDelete;
 import org.springframework.stereotype.Component;
@@ -30,12 +33,28 @@ public class Vendor {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long vendor_id;
+	
+	@NotNull(message="Name should not be null")
+	@NotBlank(message="Name should not be blank")
+	@Pattern(regexp="[a-zA-Z0-9]{5,15}",message="Name Should be minimum of 5 and maximum of 15 characters")
 	private String vendor_name;
+	
+	@NotNull(message="Email should not be null")
+	@NotBlank(message="Email should not be blank")
+	@Pattern(regexp="[^A-Z]{4,25}@.{4,10}\\..{2,5}",message="Email should contain atleast 4 characters before @")
 	@Column(unique=true)
 	private String vendor_email;
+	
+	@NotNull(message="Password should not be null")
+	@NotBlank(message="Password should not be blank")
 	private String vendor_password;
+	
+	@Pattern(regexp="^[6-9]\\d{9}",message="mobile should start with 6/7/8/9 and there must be 10 numbers")
 	@Column(unique=true)
 	private String vendor_mobile;
+	
+	@NotNull(message="Company name should not be null")
+	@NotBlank(message="Company name should not be blank")
 	@Column(unique=true)
     private String company_name;
 	private boolean vendor_active;

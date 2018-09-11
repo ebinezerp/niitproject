@@ -2,13 +2,18 @@ package ecommerce.springwebdemo;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
+import javax.mail.Session;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.support.PropertiesBeanDefinitionReader;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,14 +29,15 @@ import ecommerce.database.model.admin.Admin;
 
 @Controller
 public class IndexController {
-
-	
 	
 	@Autowired
 	private VendorDaoService vendorDaoService;
 	
 	@Autowired
 	private AdminDao adminDao;
+	
+	@Autowired
+	private Mail mail;
 	
 	//@RequestMapping(value= {"/","index"},method=RequestMethod.GET)
 	@GetMapping(value= {"/","index"})
@@ -58,16 +64,25 @@ public class IndexController {
 	}
 	
     @PostMapping("signup")
-	public String addVendor(@ModelAttribute("vendor") Vendor vendor)
+	public String addVendor(@Valid @ModelAttribute("vendor") Vendor vendor,BindingResult result)
 	{
-    	if(vendorDaoService.addVendor(vendor))
+    	if(!result.hasErrors())
     	{
-    		System.out.println(vendor.getVendor_name());
+    		if(vendorDaoService.addVendor(vendor))
+        	{
+        		System.out.println(vendor.getVendor_name());
+                 mail=new Mail();
+                mail.sendMail(vendor.getVendor_email(), vendor.getVendor_name());
+        		return "redirect:login";
+        	}else {
+        		return "signup";
+        	}
     		
-    		return "redirect:login";
     	}else {
     		return "signup";
+    		
     	}
+    	
          		
 	}
     
