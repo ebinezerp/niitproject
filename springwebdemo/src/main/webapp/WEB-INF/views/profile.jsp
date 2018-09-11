@@ -24,5 +24,8 @@
        </tr>
     </table>
 <h3><a href="editvendor">Edit</a></h3>
+
+<h3><a href="addproduct">addProducts</a></h3>
+
 </body>
 </html>

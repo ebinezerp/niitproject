@@ -39,6 +39,12 @@ public class Vendor {
 	@Pattern(regexp="[a-zA-Z0-9]{5,15}",message="Name Should be minimum of 5 and maximum of 15 characters")
 	private String vendor_name;
 	
+	@Column(nullable=false)
+	private int verificationCode;
+	
+	private boolean emailverified;
+	
+	
 	@NotNull(message="Email should not be null")
 	@NotBlank(message="Email should not be blank")
 	@Pattern(regexp="[^A-Z]{4,25}@.{4,10}\\..{2,5}",message="Email should contain atleast 4 characters before @")
@@ -71,6 +77,22 @@ public class Vendor {
 	
 	public long getVendor_id() {
 		return vendor_id;
+	}
+
+	public boolean isEmailverified() {
+		return emailverified;
+	}
+
+	public void setEmailverified(boolean emailverified) {
+		this.emailverified = emailverified;
+	}
+	
+	public int getVerificationCode() {
+		return verificationCode;
+	}
+
+	public void setVerificationCode(int verificationCode) {
+		this.verificationCode = verificationCode;
 	}
 	
 	 public boolean getVendor_active() {

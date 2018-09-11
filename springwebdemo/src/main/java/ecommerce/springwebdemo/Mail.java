@@ -2,6 +2,7 @@ package ecommerce.springwebdemo;
 
 import java.util.Date;
 import java.util.Properties;
+import java.util.Random;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -18,8 +19,9 @@ import org.springframework.stereotype.Component;
 public class Mail {
 	
 	
-	public void sendMail(String email,String name) {
+	public void sendMail(String email,String name,int code) {
 		
+
 		
 		try {
 		String host="smtp.gmail.com";
@@ -30,7 +32,9 @@ public class Mail {
 		String subject="Test Email";
 		String messageText="Hii ";
 		messageText=messageText.concat(name);
-		messageText=messageText.concat(" you are now registered with nikhils ecommerce website. Thank you.");
+		messageText=messageText.concat(" you are now registered with nikhils ecommerce website. Your One Time Password is ");
+		messageText=messageText.concat(Integer.toString(code));
+		messageText=messageText.concat(" please dont share this with anyone. Thank you");
 		boolean sessionDebug=false;
 		
 		Properties properties=System.getProperties();

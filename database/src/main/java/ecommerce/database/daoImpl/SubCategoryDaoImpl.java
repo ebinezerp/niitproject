@@ -1,5 +1,7 @@
 package ecommerce.database.daoImpl;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.hibernate.HibernateException;
@@ -30,6 +32,21 @@ public class SubCategoryDaoImpl implements SubCategoryDaoService{
 			// TODO: handle exception
 			return null;
 		}
+
+	}
+
+	@Override
+	public List<SubCategory> getAllSubcategories() {
+		// TODO Auto-generated method stub
+		try {
+			
+			return	sessionFactory.getCurrentSession().createCriteria(SubCategory.class).list();
+				
+				
+			} catch (HibernateException e) {
+				// TODO: handle exception
+				return null;
+			}
 
 	}
 

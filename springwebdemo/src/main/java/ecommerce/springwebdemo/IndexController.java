@@ -1,16 +1,22 @@
 package ecommerce.springwebdemo;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Random;
 
 import javax.mail.Session;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.support.PropertiesBeanDefinitionReader;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,10 +28,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import ecommerce.database.dao.CategoryDaoService;
+import ecommerce.database.dao.SubCategoryDaoService;
 import ecommerce.database.dao.VendorDaoService;
 import ecommerce.database.dao.admin.AdminDao;
+import ecommerce.database.model.SubCategory;
 import ecommerce.database.model.Vendor;
 import ecommerce.database.model.admin.Admin;
+import ecommerce.database.model.products.Laptop;
+import ecommerce.database.model.products.Mobile;
+import ecommerce.database.model.products.Refrigerator;
 
 @Controller
 public class IndexController {
@@ -38,6 +50,9 @@ public class IndexController {
 	
 	@Autowired
 	private Mail mail;
+	
+	@Autowired
+	private SubCategoryDaoService subCategoryDaoService;
 	
 	//@RequestMapping(value= {"/","index"},method=RequestMethod.GET)
 	@GetMapping(value= {"/","index"})
@@ -64,16 +79,23 @@ public class IndexController {
 	}
 	
     @PostMapping("signup")
-	public String addVendor(@Valid @ModelAttribute("vendor") Vendor vendor,BindingResult result)
+	public String addVendor(@Valid @ModelAttribute("vendor") Vendor vendor,BindingResult result,HttpServletRequest httpServletRequest)
 	{
+    	
     	if(!result.hasErrors())
     	{
+    		Random randomCode=new Random();
+        	int verify=randomCode.nextInt(99999) +  10000;
+            vendor.setVerificationCode(verify);
     		if(vendorDaoService.addVendor(vendor))
         	{
         		System.out.println(vendor.getVendor_name());
                  mail=new Mail();
-                mail.sendMail(vendor.getVendor_email(), vendor.getVendor_name());
-        		return "redirect:login";
+                mail.sendMail(vendor.getVendor_email(), vendor.getVendor_name(),verify);
+              httpServletRequest.setAttribute("id", vendor.getVendor_id());
+              System.out.println(vendor.getVendor_id());
+           
+        		return "emailConfirmation";
         	}else {
         		return "signup";
         	}
@@ -85,6 +107,28 @@ public class IndexController {
     	
          		
 	}
+    
+    
+    @PostMapping("emailverification")
+    public String emailConfirmation(HttpServletRequest request)
+    {
+    	System.out.println(Integer.parseInt(request.getParameter("id")));
+     Vendor	existingvendor=vendorDaoService.getVendorById(Integer.parseInt(request.getParameter("id")));
+     System.out.println("from page"+request.getAttribute("code"));
+     System.out.println("from database"+existingvendor.getVerificationCode());
+           	if(Integer.parseInt(request.getParameter("code"))==existingvendor.getVerificationCode())
+           	{
+           		existingvendor.setEmailverified(true);
+           		vendorDaoService.editVendor(existingvendor);
+           		return "redirect:login";
+           		
+           	}else {
+           		return "emailConfirmation";
+           	}
+    }
+    
+    
+    
     
    
 	@GetMapping("login")
@@ -177,4 +221,7 @@ public class IndexController {
 		httpSession.setAttribute("vendor", vendor);
 		return "profile";
 	}
+	
+	
+	
 }

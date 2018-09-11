@@ -23,8 +23,10 @@ public class Product {
 	private String product_model;
 	private short warrantyInMonths;
     private String product_color;
+    private int noOfProducts;
     
-    @ManyToOne
+   
+	@ManyToOne
     private Vendor vendor;
     
     @ManyToOne
@@ -73,5 +75,11 @@ public class Product {
 		this.warrantyInMonths = warrantyInMonths;
 	}
 	
+	 public int getNoOfProducts() {
+			return noOfProducts;
+		}
+		public void setNoOfProducts(int noOfProducts) {
+			this.noOfProducts = noOfProducts;
+		}
     
 }
