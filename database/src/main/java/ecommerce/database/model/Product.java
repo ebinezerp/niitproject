@@ -1,6 +1,10 @@
 package ecommerce.database.model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,11 +29,14 @@ public class Product {
     private String product_color;
     private int noOfProducts;
     
+    @OneToMany(mappedBy="product",fetch=FetchType.EAGER,cascade=CascadeType.ALL)
+    private List<NumberOfProducts> numberOfProducts;
    
 	@ManyToOne
     private Vendor vendor;
     
-    @ManyToOne
+   
+	@ManyToOne
     private SubCategory subCategory;
     
 	public SubCategory getSubCategory() {
@@ -43,6 +50,13 @@ public class Product {
 	}
 	public void setProduct_color(String product_color) {
 		this.product_color = product_color;
+	}
+	
+	public List<NumberOfProducts> getNumberOfProducts() {
+		return numberOfProducts;
+	}
+	public void setNumberOfProducts(List<NumberOfProducts> numberOfProducts) {
+		this.numberOfProducts = numberOfProducts;
 	}
 	public Vendor getVendor() {
 		return vendor;

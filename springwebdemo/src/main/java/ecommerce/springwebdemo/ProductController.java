@@ -1,5 +1,6 @@
 package ecommerce.springwebdemo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,8 +15,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import ecommerce.database.dao.NoOfProductsDaoService;
 import ecommerce.database.dao.SubCategoryDaoService;
+import ecommerce.database.dao.products.LaptopDaoService;
 import ecommerce.database.dao.products.MobileDaoService;
 import ecommerce.database.model.NumberOfProducts;
+import ecommerce.database.model.Product;
 import ecommerce.database.model.SubCategory;
 import ecommerce.database.model.Vendor;
 import ecommerce.database.model.products.Laptop;
@@ -36,6 +39,8 @@ public class ProductController {
 	
 	@Autowired
 	private NumberOfProducts numberOfProducts;
+	
+	private LaptopDaoService laptopDaoService;
 	
 	@GetMapping("addproduct")
 	public String addProductsPage(Model model)
@@ -67,25 +72,51 @@ public class ProductController {
 	public String addMobile(@ModelAttribute("mobile") Mobile mobile,HttpSession session)
 	{
 		mobile.setVendor((Vendor)session.getAttribute("vendor"));
+		
+		List<NumberOfProducts> numberOfProductsList=listOfProducts(mobile);
+		
+		mobile.setNumberOfProducts(numberOfProductsList);
+		
 		if(mobileDaoService.addMobile(mobile))
-		{
-			numberOfProducts.setProduct(mobile);
-			for(int i=0;i<mobile.getNoOfProducts();i++) {
-				
-			    if(noOfProductsDaoService.addNumberOFProducts(numberOfProducts)==false)
-			    {
-			    	System.out.println("adding Number of products failed");
-				    return "addproduct";
-			    }
-			}
-			
-			System.out.println("Number of Products Successfully added");
+		{	
 			
 			return "products";
 			
 		}else {
 			return "addproduct";
 		}
+	}
+	
+	@PostMapping("addlaptop")
+	public String addLaptop(@ModelAttribute("laptop") Laptop laptop,HttpSession session)
+	{
+		laptop.setVendor((Vendor)session.getAttribute("vendor"));
+		
+		List<NumberOfProducts> numberOfProductsList=listOfProducts(laptop);
+		
+		laptop.setNumberOfProducts(numberOfProductsList);
+		
+		
+		if(laptopDaoService.addLaptop(laptop))
+		{			
+			return "products";
+			
+		}else {
+			return "addproduct";
+		}
+	}
+	
+	
+	private List<NumberOfProducts> listOfProducts(Product product)
+	{
+		List<NumberOfProducts> numberOfProductsList=new ArrayList<NumberOfProducts>();
+		for(int i=1;i<=product.getNoOfProducts();i++)
+		{
+			NumberOfProducts numberOfProducts=new NumberOfProducts();
+			numberOfProducts.setProduct(product);
+			numberOfProductsList.add(numberOfProducts);
+		}	
+		return numberOfProductsList;
 	}
 	
 }
