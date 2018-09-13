@@ -1,5 +1,8 @@
 package ecommerce.springwebdemo;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.server.reactive.ContextPathCompositeHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,6 +52,11 @@ public class ProductController {
 	@Autowired
 	private ProductDaoService productDaoService;
 	
+	
+	@Autowired
+	private SaveImage saveImage;
+	
+	
 	@GetMapping("addproduct")
 	public String addProductsPage(Model model)
 	{
@@ -75,7 +84,7 @@ public class ProductController {
 	}
 	
 	@PostMapping("addmobile")
-	public String addMobile(@ModelAttribute("mobile") Mobile mobile,HttpSession session)
+	public String addMobile(@ModelAttribute("mobile") Mobile mobile,HttpSession session,HttpServletRequest request)
 	{
 		mobile.setVendor((Vendor)session.getAttribute("vendor"));
 		
@@ -83,11 +92,13 @@ public class ProductController {
 		
 		mobile.setNumberOfProducts(numberOfProductsList);
 		
+		
 		if(mobileDaoService.addMobile(mobile))
 		{	
-			
-			
-			
+					
+		 saveImage.saveImage(mobile,request);
+		
+				
 			session.setAttribute("products",productDaoService.getAllProducts((Vendor)session.getAttribute("vendor")));
 			return "redirect:products";
 			
@@ -157,5 +168,6 @@ public class ProductController {
 		}	
 		return numberOfProductsList;
 	}
+	
 	
 }

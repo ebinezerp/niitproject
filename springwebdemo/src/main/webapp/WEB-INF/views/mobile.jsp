@@ -18,7 +18,7 @@
 </head>
 <body>
 	<springform:form method="post" action="addmobile"
-		modelAttribute="mobile">
+		modelAttribute="mobile" enctype="multipart/form-data">
 		<springform:input path="subCategory.subCategory_id" type="hidden"
 			value="${subCategoryId}" />
 
