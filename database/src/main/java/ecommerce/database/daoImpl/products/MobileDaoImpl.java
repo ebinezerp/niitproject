@@ -54,4 +54,15 @@ public class MobileDaoImpl implements MobileDaoService {
 		}
 	}
 
+	@Override
+	public Mobile getMobile(long productId) {
+		// TODO Auto-generated method stub
+		try {
+		return  (Mobile)sessionFactory.getCurrentSession().createQuery("from Mobile where productId=:id").setParameter("id",productId).getSingleResult();
+		}catch (HibernateException e) {
+			// TODO: handle exception
+			return null;
+		}
+	}
+
 }

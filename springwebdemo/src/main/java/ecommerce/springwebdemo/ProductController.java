@@ -11,9 +11,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import ecommerce.database.dao.NoOfProductsDaoService;
+import ecommerce.database.dao.ProductDaoService;
 import ecommerce.database.dao.SubCategoryDaoService;
 import ecommerce.database.dao.products.LaptopDaoService;
 import ecommerce.database.dao.products.MobileDaoService;
@@ -40,7 +42,11 @@ public class ProductController {
 	@Autowired
 	private NumberOfProducts numberOfProducts;
 	
+	@Autowired
 	private LaptopDaoService laptopDaoService;
+	
+	@Autowired
+	private ProductDaoService productDaoService;
 	
 	@GetMapping("addproduct")
 	public String addProductsPage(Model model)
@@ -79,13 +85,42 @@ public class ProductController {
 		
 		if(mobileDaoService.addMobile(mobile))
 		{	
-			
-			return "products";
+			session.setAttribute("products",productDaoService.getAllProducts((Vendor)session.getAttribute("vendor")));
+			return "redirect:products";
 			
 		}else {
 			return "addproduct";
 		}
 	}
+	
+	
+	@GetMapping("products")
+	public String displayProducts(HttpSession session)
+	{
+		session.setAttribute("products",productDaoService.getAllProducts((Vendor)session.getAttribute("vendor")));
+		return "products";
+	}
+	
+	
+	@GetMapping("productdetails/{productId}")
+	public String getProductDetails(@PathVariable("productId")long productId,Model model)
+	{
+		System.out.println(productId);
+		
+		String name=subCategoryDaoService.getSubCategory(productDaoService.getSubCategoryId(productId)).getSubCategory_name();
+		switch(name)
+		{
+		case "mobile":model.addAttribute("mobile",mobileDaoService.getMobile(productId));
+			return "displaymobile";
+		               
+		case "laptop": model.addAttribute("laptop",laptopDaoService.retrieveLaptopById(productId));
+			return "displaylaptop";
+		default:return "products";
+		}
+				
+	}
+	
+
 	
 	@PostMapping("addlaptop")
 	public String addLaptop(@ModelAttribute("laptop") Laptop laptop,HttpSession session)
@@ -99,7 +134,8 @@ public class ProductController {
 		
 		if(laptopDaoService.addLaptop(laptop))
 		{			
-			return "products";
+			session.setAttribute("products",productDaoService.getAllProducts((Vendor)session.getAttribute("vendor")));
+			return "redirect:products";
 			
 		}else {
 			return "addproduct";

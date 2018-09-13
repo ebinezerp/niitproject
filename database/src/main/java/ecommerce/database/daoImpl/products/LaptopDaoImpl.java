@@ -55,10 +55,19 @@ public class LaptopDaoImpl implements LaptopDaoService{
 	}
 
 	@Override
-	public Laptop retrieveLaptopById(long laptop_id) {
+	public Laptop retrieveLaptopById(long productId) {
 		// TODO Auto-generated method stub
 		
-				return null;
+		try {
+			
+		return	(Laptop)sessionFactory.getCurrentSession().createQuery("from Laptop where productId=:id").setParameter("id", productId).getSingleResult();
+			
+		} catch (HibernateException e) {
+			// TODO: handle exception
+			return null;
+		}
+		
+				
 	}
 
 }

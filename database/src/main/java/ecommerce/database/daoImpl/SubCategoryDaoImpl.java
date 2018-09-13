@@ -21,11 +21,11 @@ public class SubCategoryDaoImpl implements SubCategoryDaoService{
 		private SessionFactory sessionFactory;
 	
 	@Override
-	public SubCategory getSubCategory(int subcategory_Id) {
+	public SubCategory getSubCategory(int subCategory_id) {
 		// TODO Auto-generated method stub
 		try {
 			
-		return	sessionFactory.getCurrentSession().get(SubCategory.class,subcategory_Id);
+		return	(SubCategory)sessionFactory.getCurrentSession().createQuery("from SubCategory where subCategory_id=:id").setParameter("id",subCategory_id).getSingleResult();
 			
 			
 		} catch (HibernateException e) {
@@ -34,6 +34,8 @@ public class SubCategoryDaoImpl implements SubCategoryDaoService{
 		}
 
 	}
+	
+	
 
 	@Override
 	public List<SubCategory> getAllSubcategories() {
@@ -49,5 +51,4 @@ public class SubCategoryDaoImpl implements SubCategoryDaoService{
 			}
 
 	}
-
 }

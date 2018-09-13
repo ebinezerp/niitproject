@@ -27,5 +27,7 @@
 
 <h3><a href="addproduct">addProducts</a></h3>
 
+<h3><a href="products">view products</a></h3>
+
 </body>
 </html>
