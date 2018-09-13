@@ -79,6 +79,10 @@
 			<springform:input path="warrantyInMonths" class="form-control"
 				placeholder="enter warranty in months" type="text" />
 		</div>
+		
+		<div class="form-group">
+		  <springform:input path="image" type="file"/>
+		</div>
 		<input type="submit" value="Submit">
 	</springform:form>
 </body>

@@ -85,6 +85,9 @@ public class ProductController {
 		
 		if(mobileDaoService.addMobile(mobile))
 		{	
+			
+			
+			
 			session.setAttribute("products",productDaoService.getAllProducts((Vendor)session.getAttribute("vendor")));
 			return "redirect:products";
 			
