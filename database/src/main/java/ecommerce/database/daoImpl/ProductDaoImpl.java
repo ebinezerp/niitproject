@@ -63,7 +63,7 @@ public class ProductDaoImpl implements ProductDaoService{
 	public List<Product> getAllProducts(Vendor vendor) {
 		// TODO Auto-generated method stub
 		try {
-         return sessionFactory.getCurrentSession().createQuery("from Product where vendor_vendor_id=:id").setParameter("id", vendor.getVendor_id()).list();
+         return sessionFactory.getCurrentSession().createQuery("from Product where vendor_vendor_id=:id and deleted=false").setParameter("id", vendor.getVendor_id()).list();
 		}catch (HibernateException e) {
 			// TODO: handle exception
 			return null;
@@ -85,17 +85,34 @@ public class ProductDaoImpl implements ProductDaoService{
 		
 	}
 
-/*	@Override
-	public Product getProduct(int productId) {
+
+
+	@Override
+	public Product getProduct(long productId) {
 		// TODO Auto-generated method stub
 		
 		try {
-			sessionFactory.getCurrentSession().createQuery()
+		return (Product)sessionFactory.getCurrentSession().createQuery("from Product where productId=:id").setParameter("id",productId).getSingleResult();
+		}catch (HibernateException e) {
+			// TODO: handle exception
+			return null;
 		}
 		
-		return null;
+		
 	}
-	*/
+
+	@Override
+	public List<Product> getLastTenProducts() {
+		// TODO Auto-generated method stub
+		try {
+			return sessionFactory.getCurrentSession().createQuery("from Product where deleted=false order by productId DESC ").setMaxResults(10).list();
+		}catch (HibernateException e) {
+			// TODO: handle exception
+			return null;
+		}
+		
+	}
+	
 	
 
 }

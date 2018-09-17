@@ -1,5 +1,7 @@
 package ecommerce.database.daoImpl.products;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.hibernate.HibernateException;
@@ -68,6 +70,17 @@ public class LaptopDaoImpl implements LaptopDaoService{
 		}
 		
 				
+	}
+
+	@Override
+	public List<Laptop> getAllLaptops() {
+		// TODO Auto-generated method stub
+		try {
+			return sessionFactory.getCurrentSession().createCriteria(Laptop.class).list();
+		} catch (HibernateException e) {
+			// TODO: handle exception
+			return null;
+		}
 	}
 
 }

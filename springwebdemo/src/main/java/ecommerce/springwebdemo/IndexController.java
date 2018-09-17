@@ -29,9 +29,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import ecommerce.database.dao.CategoryDaoService;
+import ecommerce.database.dao.ProductDaoService;
 import ecommerce.database.dao.SubCategoryDaoService;
 import ecommerce.database.dao.VendorDaoService;
 import ecommerce.database.dao.admin.AdminDao;
+import ecommerce.database.dao.products.MobileDaoService;
+import ecommerce.database.model.Product;
 import ecommerce.database.model.SubCategory;
 import ecommerce.database.model.Vendor;
 import ecommerce.database.model.admin.Admin;
@@ -54,12 +57,23 @@ public class IndexController {
 	@Autowired
 	private SubCategoryDaoService subCategoryDaoService;
 	
+	@Autowired
+	private ProductDaoService productDaoService;
+	
+	@Autowired
+	private MobileDaoService mobileDaoService;
+	
 	//@RequestMapping(value= {"/","index"},method=RequestMethod.GET)
 	@GetMapping(value= {"/","index"})
-	public ModelAndView indexPage()
+	public ModelAndView indexPage(HttpSession session)
 	{
+		List<Product> tenproducts=productDaoService.getLastTenProducts();
+		System.out.println(tenproducts);
+		session.setAttribute("tenproducts",tenproducts);
+		session.setAttribute("electronics",subCategoryDaoService.getAllSubcategories());
+		
 		ModelAndView view=new ModelAndView("index");
-		view.addObject("message","Hello World");
+		
 		return view;
 	}
 	
@@ -70,15 +84,27 @@ public class IndexController {
 	    return "aboutus";
 	}
 	
-	@GetMapping("signup")
+	@GetMapping("vendorsignup")
 	public ModelAndView signUp()
 	{
-		ModelAndView view=new ModelAndView("signup");
+		ModelAndView view=new ModelAndView("vendorsignup");
 		view.addObject("vendor",new Vendor());
 		return view;
 	}
 	
-    @PostMapping("signup")
+	@GetMapping("displayproducts/{subCategory_name}")
+	public String displayProducts(@PathVariable("subCategory_name")String subCategory_name,HttpSession session)
+	{
+		switch (subCategory_name) {
+		case "allmobiles":session.setAttribute("mobiles",getSortedMobiles(mobileDaoService.getAllMobiles()));
+		       return "displayAllMobiles";	
+
+		default: return "index";
+		
+		}
+	}
+	
+    @PostMapping("vendorsignup")
 	public String addVendor(@Valid @ModelAttribute("vendor") Vendor vendor,BindingResult result,HttpServletRequest httpServletRequest)
 	{
     	
@@ -97,11 +123,11 @@ public class IndexController {
            
         		return "emailConfirmation";
         	}else {
-        		return "signup";
+        		return "vendorsignup";
         	}
     		
     	}else {
-    		return "signup";
+    		return "vendorsignup";
     		
     	}
     	
@@ -131,15 +157,15 @@ public class IndexController {
     
     
    
-	@GetMapping("login")
+	@GetMapping("vendorlogin")
 	public ModelAndView login()
 	{
-		ModelAndView view = new ModelAndView("login");
+		ModelAndView view = new ModelAndView("vendorlogin");
 		view.addObject("vendor", new Vendor());
 		return view;
 	}
 	
-	@PostMapping("login")
+	@PostMapping("vendorlogin")
 	public String vendorLogin(String email,String password,Model model,HttpSession httpSession)
 	{
 		
@@ -151,12 +177,19 @@ public class IndexController {
 			System.out.println("login Successful");
 			httpSession.setAttribute("vendor", vendor);
 			System.out.println(vendor);
-			return "profile";
+			return "redirect:/products";
 		 }else {
 			 System.out.println("login Unsuccessful");
 			 model.addAttribute("message","No Vendor exists with these credentials");
 			 return "redirect:login";
 		 }
+	}
+	
+	
+	@GetMapping("profile")
+	public String displayProfile()
+	{
+		return "profile";
 	}
 	
 	@GetMapping("adminlogin")
@@ -222,6 +255,20 @@ public class IndexController {
 		return "profile";
 	}
 	
+	public List<Mobile> getSortedMobiles(List<Mobile> mobiles)
+	{
+		List<Mobile> sorted=null;
+		
+		for(Mobile mobile:mobiles)
+		{
+			if(mobile.isDeleted()==false)
+			{
+				sorted.add(mobile);
+			}
+		}
+		return sorted;
+		
+	}
 	
 	
 }

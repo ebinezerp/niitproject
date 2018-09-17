@@ -1,5 +1,7 @@
 package ecommerce.database.daoImpl.products;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.hibernate.HibernateException;
@@ -63,6 +65,20 @@ public class MobileDaoImpl implements MobileDaoService {
 			// TODO: handle exception
 			return null;
 		}
+	}
+
+	@Override
+	public List<Mobile> getAllMobiles() {
+		// TODO Auto-generated method stub
+		try {
+			return sessionFactory.getCurrentSession().createCriteria(Mobile.class).list();
+			
+		}catch (HibernateException e) {
+			// TODO: handle exception
+			return null;
+		}
+	
+		
 	}
 
 }

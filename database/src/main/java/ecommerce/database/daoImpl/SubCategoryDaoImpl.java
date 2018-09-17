@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ecommerce.database.dao.SubCategoryDaoService;
+import ecommerce.database.model.Product;
 import ecommerce.database.model.SubCategory;
 
 
@@ -51,4 +52,22 @@ public class SubCategoryDaoImpl implements SubCategoryDaoService{
 			}
 
 	}
+
+
+
+	@Override
+	public List<Product> getProductsBySubCategoryId(int subCategory_id) {
+		// TODO Auto-generated method stub
+		try {
+		
+			return sessionFactory.getCurrentSession().createQuery("from Product where subCategory_subCategory_id=:id",Product.class).setParameter("id",subCategory_id).list();
+		}catch (HibernateException e) {
+			// TODO: handle exception
+			return null;
+		}
+		
+		
+	}
 }
+
+

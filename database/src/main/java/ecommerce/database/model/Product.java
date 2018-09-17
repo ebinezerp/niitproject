@@ -27,9 +27,11 @@ public class Product {
 	private long productId;
 	private String product_brand;
 	private String product_model;
+	private int price;
 	private short warrantyInMonths;
 	private String product_color;
 	private int noOfProducts;
+	private boolean deleted;
 	@Transient
 	private MultipartFile image;
 
@@ -120,6 +122,22 @@ public class Product {
 
 	public void setImage(MultipartFile image) {
 		this.image = image;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+	
+	public int getPrice() {
+		return price;
+	}
+
+	public void setPrice(int price) {
+		this.price = price;
 	}
 
 }

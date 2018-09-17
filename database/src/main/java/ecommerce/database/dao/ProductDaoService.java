@@ -13,5 +13,6 @@ public interface ProductDaoService {
     public abstract boolean updateProduct(Product product);
     public abstract List<Product> getAllProducts(Vendor vendor);
     public abstract int getSubCategoryId(long productId);
-   // public abstract Product getProduct(int productId);
+    public abstract Product getProduct(long productId);
+    public abstract List<Product> getLastTenProducts();
 }

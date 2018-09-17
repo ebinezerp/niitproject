@@ -7,16 +7,41 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
+
+ <nav class="navbar navbar-inverse navbar-fixed-top" >
+      <div class="container-fluid">
+        <div class="navbar-header">
+            <a href="#" class="navbar-brand">E-Commerce</a>
+        </div>
+       
+        <ul class="nav navbar-nav" style="float: right;">
+            <li><a href="profile">profile</a></li>
+            <li ><a href="editvendor">edit-profile</a></li>
+            <li><a href="addproduct">add-products</a></li>
+            <li><a href="products">view products</a></li>
+           <li>
+             <div class="dropdown" style="padding-top:15px">
+              <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"><span class="caret"></span></button>
+              <ul class="dropdown-menu dropdown-menu-right" >
+                <li><a href="editvendor">edit</a></li>
+                <li><a href="addproduct">addProducts</a></li>
+                <li><a href="products">view products</a></li>
+                <li class="divider"></li>
+                <li><a href="#">logout</a></li>
+              </ul>
+            </div>
+          </li>
+             </div>
+        </ul>
+      
+    </nav>
+
+<div style="margin-top:50px; width:500px">
 	<springform:form method="post" action="addmobile"
 		modelAttribute="mobile" enctype="multipart/form-data">
 		<springform:input path="subCategory.subCategory_id" type="hidden"
@@ -24,60 +49,60 @@
 
 		<div class="form-group">
 			<springform:input path="product_brand" class="form-control"
-				placeholder="enter brand" type="text" />
+				placeholder="enter brand"  />
 		</div>
 		<div class="form-group">
 			<springform:input path="product_model" class="form-control"
-				placeholder="enter model" type="text" />
+				placeholder="enter model"  />
 		</div>
 		<div class="form-group">
 			<springform:input path="product_color" class="form-control"
-				placeholder="enter color" type="text" />
+				placeholder="enter color"  />
 		</div>
 		<div class="form-group">
 			<springform:input path="mobile_ram" class="form-control"
-				placeholder="enter ram" type="number" />
+				placeholder="enter ram"  />
 		</div>
 		<div class="form-group">
 			<springform:input path="mobile_rom" class="form-control"
-				placeholder="enter rom" type="number" />
+				placeholder="enter rom"  />
 		</div>
 		<div class="form-group">
-			<springform:label path=""></springform:label>
-			<springform:radiobutton path="mobile_lte" value="true" />
-			<springform:radiobutton path="mobile_lte" value="false" />
+	        <label>4G/LTE :</label>
+			<springform:radiobutton path="mobile_lte" value="true" />True
+			<springform:radiobutton path="mobile_lte" value="false" />False
 		</div>
 		<div class="form-group">
 			<springform:input path="mobile_os" class="form-control"
-				placeholder="enter os" type="text" />
+				placeholder="enter os"  />
 		</div>
 		<div class="form-group">
 			<springform:input path="mobile_weight" class="form-control"
-				placeholder="enter weight" type="number" />
+				placeholder="enter weight"  />
 		</div>
 		<div class="form-group">
 			<springform:input path="mobile_display_size" class="form-control"
-				placeholder="enter size" type="number" />
+				placeholder="enter size"  />
 		</div>
 		<div class="form-group">
 			<springform:input path="mobile_frontcam" class="form-control"
-				placeholder="enter frontcam pixels" type="number" />
+				placeholder="enter frontcam pixels"  />
 		</div>
 		<div class="form-group">
 			<springform:input path="mobile_rearcam" class="form-control"
-				placeholder="enter rearcam pixels" type="number" />
+				placeholder="enter rearcam pixels"  />
 		</div>
 		<div class="form-group">
 			<springform:input path="noOfProducts" class="form-control"
-				placeholder="enter number of products" type="number" />
+				placeholder="enter number of products"  />
 		</div>
 		<div class="form-group">
 			<springform:input path="mobile_description" class="form-control"
-				placeholder="enter description" type="text" />
+				placeholder="enter description"  />
 		</div>
 		<div class="form-group">
 			<springform:input path="warrantyInMonths" class="form-control"
-				placeholder="enter warranty in months" type="text" />
+				placeholder="enter warranty in months"  />
 		</div>
 		
 		<div class="form-group">
@@ -85,5 +110,6 @@
 		</div>
 		<input type="submit" value="Submit">
 	</springform:form>
+	</div>
 </body>
 </html>
