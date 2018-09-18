@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
     <%@taglib uri="http://www.springframework.org/tags/form" prefix="springform" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -13,15 +14,22 @@
 </head>
 <body>
 <div class="container">
-    <springform:form method="post" action="adminlogin" modelAttribute="admin">
+
+<c:if test="${not empty error}">
+			<div class="error">${error}</div>
+		</c:if>
+		<c:if test="${not empty msg}">
+			<div class="msg">${msg}</div>
+		</c:if>
+    <form method="post" name="adminLoginForm" action="adminloginpagelogin" >
      <div  class="form-group">
-       <springform:input type="email" path="email"/>
+       <input type="text" name="email"/>
      </div>
      <div  class="form-group">
-       <springform:input type="password" path="password"/>
+       <input type="password" name="password"/>
      </div>
       <input type="submit" class="btn btn-default" >
-     </springform:form>
+     </form>
 </div>
 </body>		
 </html>

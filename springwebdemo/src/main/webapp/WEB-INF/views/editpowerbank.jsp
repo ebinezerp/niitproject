@@ -66,6 +66,10 @@
 				placeholder="enter color"  />
 		</div>
 		<div class="form-group">
+			<springform:input path="price" class="form-control"
+				placeholder="enter price"  />
+		</div>
+		<div class="form-group">
 			<springform:input path="batteryType" class="form-control"
 				placeholder="enter battery Type"  />
 		</div>

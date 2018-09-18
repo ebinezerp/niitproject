@@ -20,7 +20,12 @@ public class Admin {
 	@Column(unique=true)
 	private String email;
 	private String password;
+	private final String role="admin";
+	private boolean active=true;
 	
+	public String getRole() {
+		return role;
+	}
 	public String getEmail() {
 		return email;
 	}

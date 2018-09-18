@@ -60,6 +60,10 @@
 				placeholder="enter color" type="text" />
 		</div>
 		<div class="form-group">
+			<springform:input path="price" class="form-control"
+				placeholder="enter price"  />
+		</div>
+		<div class="form-group">
 	        <label>wireless</label>
 			<springform:radiobutton path="wireless" value="true" />True
 			<springform:radiobutton path="wireless" value="false" />False

@@ -27,6 +27,10 @@ public class Customer {
 	@Column(nullable=false)
 	private String customer_password;
 
+	private boolean active=true;
+	
+	private final String role="customer";
+	
 	@OneToMany(mappedBy="customer")
 	private Set<CustomerAddress> addresses;
 	
@@ -76,5 +80,13 @@ public class Customer {
 		this.accounts = accounts;
 	}
 	
-	
+	public boolean isActive() {
+		return active;
+	}
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	public String getRole() {
+		return role;
+	}
 }

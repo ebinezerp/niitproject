@@ -3,11 +3,13 @@ package ecommerce.springwebdemo;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.constraints.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.reactive.ContextPathCompositeHandler;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import ecommerce.database.dao.NoOfProductsDaoService;
 import ecommerce.database.dao.ProductDaoService;
 import ecommerce.database.dao.SubCategoryDaoService;
+import ecommerce.database.dao.VendorDaoService;
 import ecommerce.database.dao.products.AirConditionerDaoService;
 import ecommerce.database.dao.products.EarPhoneDaoService;
 import ecommerce.database.dao.products.LaptopDaoService;
@@ -73,6 +76,9 @@ public class ProductController {
 	@Autowired
 	private AirConditionerDaoService airConditionerDaoService;
 
+	@Autowired
+	private VendorDaoService vendorDaoService;
+	
 	@Autowired
 	private TelevisionDaoService televisionDaoService;
 
@@ -153,9 +159,10 @@ public class ProductController {
 		}
 	}
 
-	@GetMapping("products")
-	public String displayProducts(HttpSession session) {
-		session.setAttribute("products", productDaoService.getAllProducts((Vendor) session.getAttribute("vendor")));
+	@GetMapping(value= {"products","vendorlogin"})
+	public String displayProducts(HttpSession session,Principal principal) {
+		session.setAttribute("products", productDaoService.getAllProducts(vendorDaoService.getVendorByEmail(principal.getName())));
+		session.setAttribute("vendor",vendorDaoService.getVendorByEmail(principal.getName()));
 		return "products";
 	}
 
@@ -203,9 +210,7 @@ public class ProductController {
 		default:return "products";
 		}
 				
-	}
-
-	
+	}	
 
 
 

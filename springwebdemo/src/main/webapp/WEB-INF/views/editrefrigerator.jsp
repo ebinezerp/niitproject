@@ -62,6 +62,10 @@
 				placeholder="enter model"  />
 		</div>
 		<div class="form-group">
+			<springform:input path="price" class="form-control"
+				placeholder="enter price"  />
+		</div>
+		<div class="form-group">
 			<springform:input path="refrigerator_capacity" class="form-control"
 				placeholder="enter capacity"  />
 		</div>

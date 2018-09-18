@@ -61,7 +61,7 @@ public class VendorRefrigeratorController {
 	}
 	
 	@PostMapping("editrefrigeratordetails")
-	public String editMobileDetails(@ModelAttribute("refrigerator") Refrigerator refrigerator, HttpServletRequest request) {
+	public String editrefrigeratorDetails(@ModelAttribute("refrigerator") Refrigerator refrigerator, HttpServletRequest request) {
 		if (!refrigerator.getImage().isEmpty()) {
 			saveImage.saveImage(refrigerator, request);
 		}

@@ -63,6 +63,10 @@
 				placeholder="enter color" type="text" />
 		</div>
 		<div class="form-group">
+			<springform:input path="price" class="form-control"
+				placeholder="enter price"  />
+		</div>
+		<div class="form-group">
 			<springform:input path="mobile_ram" class="form-control"
 				placeholder="enter ram" type="number" />
 		</div>

@@ -42,6 +42,8 @@ public class Vendor {
 	@Column(nullable=false)
 	private int verificationCode;
 	
+	private final String role="vendor";
+	
 	private boolean emailverified;
 	
 	

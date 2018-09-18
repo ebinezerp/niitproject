@@ -1,0 +1,77 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans.xsd
+      http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context.xsd
+      http://www.springframework.org/schema/mvc
+      http://www.springframework.org/schema/mvc/spring-mvc.xsd
+      http://www.springframework.org/schema/security
+      http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<!-- <security:http auto-config="true" use-expressions="true"> <security:intercept-url 
+		pattern="/index" access="anonymous" /> <security:form-login login-page="/login" 
+		default-target-url="/products" username-parameter="vendor_email" password-parameter="vendor_password" 
+		authentication-failure-url="/login" /> <security:logout logout-success-url="/" 
+		/> <security:csrf disabled="true"/> <security:access-denied-handler error-page="/403" 
+		/> </security:http> <bean id="noOpPasswordEncoder" class="org.springframework.security.crypto.password.NoOpPasswordEncoder"> 
+		</bean> <security:authentication-manager> <security:authentication-provider> 
+		<security:password-encoder ref="noOpPasswordEncoder"></security:password-encoder> 
+		<security:jdbc-user-service data-source-ref="dataSource" users-by-username-query="select 
+		vendor_email,vendor_password,vendor_active from Vendor where vendor_email=?" 
+		authorities-by-username-query="select vendor_email,role from Vendor where 
+		vendor_email=? " /> </security:authentication-provider> <security:authentication-provider> 
+		<security:jdbc-user-service data-source-ref="dataSource" users-by-username-query="select 
+		email,password,active from Admin where email=?" authorities-by-username-query="select 
+		email,role from admin where email =? " /> </security:authentication-provider> 
+		<security:authentication-provider> <security:jdbc-user-service data-source-ref="dataSource" 
+		users-by-username-query="select customer_email,customer_password,active from 
+		customer where customer_email=?" authorities-by-username-query="select customer_email,role 
+		from customer where customer_email=? " /> </security:authentication-provider> 
+		</security:authentication-manager> -->
+
+	<security:http auto-config="true" use-expressions="true">
+		<security:intercept-url pattern="/index"
+			access="anonymous" />
+		<security:form-login login-page="/login"
+			default-target-url="/products" username-parameter="vendor_email"
+			password-parameter="vendor_password"
+			authentication-failure-forward-url="/login" />
+
+
+		<security:csrf disabled="true" />
+		<security:access-denied-handler
+			error-page="/403" />
+		<security:logout logout-url="/logout"
+			logout-success-url="/index" />
+			
+			
+			
+	</security:http>
+
+      <security:global-method-security order="2"></security:global-method-security>
+
+
+	<bean id="noOpPasswordEncoder"
+		class="org.springframework.security.crypto.password.NoOpPasswordEncoder">
+
+	</bean>
+
+	<security:authentication-manager>
+		<security:authentication-provider>
+			<security:password-encoder
+				ref="noOpPasswordEncoder"></security:password-encoder>
+			<security:jdbc-user-service
+				data-source-ref="dataSource"
+				users-by-username-query="select vendor_email,vendor_password,vendor_active from Vendor where vendor_email=?"
+				authorities-by-username-query="select role from Vendor where vendor_email=?" />
+
+			
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+
+</beans>

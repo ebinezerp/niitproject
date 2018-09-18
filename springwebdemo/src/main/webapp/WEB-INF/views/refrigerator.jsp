@@ -60,6 +60,10 @@
 				placeholder="enter capacity"  />
 		</div>
 		<div class="form-group">
+			<springform:input path="price" class="form-control"
+				placeholder="enter price"  />
+		</div>
+		<div class="form-group">
 			<springform:input path="product_color" class="form-control"
 				placeholder="enter color"  />
 		</div>

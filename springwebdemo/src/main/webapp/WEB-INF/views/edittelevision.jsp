@@ -65,6 +65,10 @@
 				placeholder="enter color"  />
 		</div>
 		<div class="form-group">
+			<springform:input path="price" class="form-control"
+				placeholder="enter price"  />
+		</div>
+		<div class="form-group">
 			<springform:input path="television_powersavings_rating" class="form-control"
 				placeholder="enter powersavings rating"  />
 		</div>

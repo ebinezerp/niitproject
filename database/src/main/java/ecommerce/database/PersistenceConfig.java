@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan("ecommerce.database")
 public class PersistenceConfig {
 	
-	@Bean
+	@Bean("dataSource")
     public 	DataSource getDataSource()
 	{
 		BasicDataSource basicDataSource=new BasicDataSource();
@@ -32,6 +32,8 @@ public class PersistenceConfig {
 		return basicDataSource;
 	    
 	}
+	
+	
 	
 	@Bean
     public   SessionFactory  getLocalSessionFactoryBuilder()

@@ -60,6 +60,10 @@
 				placeholder="enter gender"  />
 		</div>
 		<div class="form-group">
+			<springform:input path="price" class="form-control"
+				placeholder="enter price"  />
+		</div>
+		<div class="form-group">
 			<springform:input path="shoetype" class="form-control"
 				placeholder="enter shoe type"  />
 		</div>

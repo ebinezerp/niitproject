@@ -59,8 +59,8 @@ public class VendorShoeController {
 	}
 	
 
-	@PostMapping("editssddetails")
-	public String editShoeDetails(@ModelAttribute("ssd") Shoe shoe, HttpServletRequest request) {
+	@PostMapping("editshoedetails")
+	public String editShoeDetails(@ModelAttribute("shoe") Shoe shoe, HttpServletRequest request) {
 		if (!shoe.getImage().isEmpty()) {
 			saveImage.saveImage(shoe, request);
 		}

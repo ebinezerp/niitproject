@@ -2,13 +2,18 @@ package ecommerce.database.daoImpl.products;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import ecommerce.database.dao.products.WatchDaoService;
 import ecommerce.database.model.products.Watch;
 
+@Component
+@Transactional
 public class WatchDaoImpl implements WatchDaoService{
 
 	@Autowired

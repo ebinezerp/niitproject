@@ -1,6 +1,7 @@
 package ecommerce.springwebdemo;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import ecommerce.database.dao.CategoryDaoService;
@@ -63,8 +65,8 @@ public class IndexController {
 	@Autowired
 	private MobileDaoService mobileDaoService;
 	
-	//@RequestMapping(value= {"/","index"},method=RequestMethod.GET)
-	@GetMapping(value= {"/","index"})
+
+	@GetMapping(value= {"index"})
 	public ModelAndView indexPage(HttpSession session)
 	{
 		List<Product> tenproducts=productDaoService.getLastTenProducts();
@@ -75,6 +77,28 @@ public class IndexController {
 		ModelAndView view=new ModelAndView("index");
 		
 		return view;
+	}
+	
+	@RequestMapping(value = { "/", "/welcome" }, method = RequestMethod.GET)
+	public ModelAndView defaultPage() {
+
+	  ModelAndView model = new ModelAndView();
+	  model.addObject("title", "Spring Security Login Form - Database Authentication");
+	  model.addObject("message", "This is default page!");
+	  model.setViewName("hello");
+	  return model;
+
+	}
+
+	@RequestMapping(value = "/admin", method = RequestMethod.GET)
+	public ModelAndView adminPage() {
+
+	  ModelAndView model = new ModelAndView();
+	  model.addObject("title", "Spring Security Login Form - Database Authentication");
+	  model.addObject("message", "This page is for ROLE_ADMIN only!");
+	  model.setViewName("admin");
+	  return model;
+
 	}
 	
 	@RequestMapping("aboutus")
@@ -138,10 +162,8 @@ public class IndexController {
     @PostMapping("emailverification")
     public String emailConfirmation(HttpServletRequest request)
     {
-    	System.out.println(Integer.parseInt(request.getParameter("id")));
+    	
      Vendor	existingvendor=vendorDaoService.getVendorById(Integer.parseInt(request.getParameter("id")));
-     System.out.println("from page"+request.getAttribute("code"));
-     System.out.println("from database"+existingvendor.getVerificationCode());
            	if(Integer.parseInt(request.getParameter("code"))==existingvendor.getVerificationCode())
            	{
            		existingvendor.setEmailverified(true);
@@ -155,7 +177,7 @@ public class IndexController {
     
     
     
-    
+  /*  
    
 	@GetMapping("vendorlogin")
 	public ModelAndView login()
@@ -163,11 +185,15 @@ public class IndexController {
 		ModelAndView view = new ModelAndView("vendorlogin");
 		view.addObject("vendor", new Vendor());
 		return view;
-	}
+	}*/
 	
+	/*
 	@PostMapping("vendorlogin")
-	public String vendorLogin(String email,String password,Model model,HttpSession httpSession)
-	{
+	public String vendorLogin(Principal principal)
+	{		
+		productDaoService.getAllProducts(vendorDaoService.getVendorByEmail(principal.getName()));
+		
+		
 		
 		//System.out.println(vendorDaoService.getVendorByEmail(vendor.getVendor_email()));
 	Vendor	vendor=vendorDaoService.vendorLogin(email,password);
@@ -183,32 +209,51 @@ public class IndexController {
 			 model.addAttribute("message","No Vendor exists with these credentials");
 			 return "redirect:login";
 		 }
-	}
+	}*/
 	
 	
+    @RequestMapping(value = "/login",method=RequestMethod.GET)
+    public ModelAndView login(@RequestParam(value = "error",required = false) String error,@RequestParam(value = "logout",required=false)String logout)
+    {
+    	
+    	System.out.println("jfkdsdajfdsjfkds");
+    	ModelAndView model=new ModelAndView();
+    	if(error!=null)
+    	{
+    		model.addObject("error","Invalid email and password");
+    	}
+    	
+    	if(logout!=null)
+    	{
+    		model.addObject("msg","You've been logged out successfully");
+    	}
+    	model.setViewName("login");
+    	return model;
+    }
+    
+    
+    
+    
 	@GetMapping("profile")
 	public String displayProfile()
 	{
 		return "profile";
 	}
 	
-	@GetMapping("adminlogin")
+	/*@GetMapping("adminlogin")
 	public String adminLogin(Model model)
 	{
 		model.addAttribute("admin", new Admin());
 		return "adminlogin";
-	}
+	}*/
 	
-	@PostMapping("adminlogin")
-	public String adminLogin(@ModelAttribute("admin") Admin admin,Map<String, Object> vendor)
+	@GetMapping("adminlogin")
+	public String adminLogin(Principal principal,Map<String, Object> vendor)
 	{
-	  	 admin=adminDao.adminLogin(admin.getEmail(), admin.getPassword());
-	  	 if(admin!=null)
-	  	 {
-	  		return "redirect:/adminpage";
-	  	 }else {
-	  		 return "adminlogin";
-	  	 }
+	  	 
+	  	
+	  		return "adminlogin";
+	  	 
 	}
 	
 	@GetMapping("adminpage")
