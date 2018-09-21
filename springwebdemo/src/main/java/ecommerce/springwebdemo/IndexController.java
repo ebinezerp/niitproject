@@ -108,13 +108,7 @@ public class IndexController {
 	    return "aboutus";
 	}
 	
-	@GetMapping("vendorsignup")
-	public ModelAndView signUp()
-	{
-		ModelAndView view=new ModelAndView("vendorsignup");
-		view.addObject("vendor",new Vendor());
-		return view;
-	}
+	
 	
 	@GetMapping("displayproducts/{subCategory_name}")
 	public String displayProducts(@PathVariable("subCategory_name")String subCategory_name,HttpSession session)
@@ -128,53 +122,7 @@ public class IndexController {
 		}
 	}
 	
-    @PostMapping("vendorsignup")
-	public String addVendor(@Valid @ModelAttribute("vendor") Vendor vendor,BindingResult result,HttpServletRequest httpServletRequest)
-	{
-    	
-    	if(!result.hasErrors())
-    	{
-    		Random randomCode=new Random();
-        	int verify=randomCode.nextInt(99999) +  10000;
-            vendor.setVerificationCode(verify);
-    		if(vendorDaoService.addVendor(vendor))
-        	{
-        		System.out.println(vendor.getVendor_name());
-                 mail=new Mail();
-                mail.sendMail(vendor.getVendor_email(), vendor.getVendor_name(),verify);
-              httpServletRequest.setAttribute("id", vendor.getVendor_id());
-              System.out.println(vendor.getVendor_id());
-           
-        		return "emailConfirmation";
-        	}else {
-        		return "vendorsignup";
-        	}
-    		
-    	}else {
-    		return "vendorsignup";
-    		
-    	}
-    	
-         		
-	}
-    
-    
-    @PostMapping("emailverification")
-    public String emailConfirmation(HttpServletRequest request)
-    {
-    	
-     Vendor	existingvendor=vendorDaoService.getVendorById(Integer.parseInt(request.getParameter("id")));
-           	if(Integer.parseInt(request.getParameter("code"))==existingvendor.getVerificationCode())
-           	{
-           		existingvendor.setEmailverified(true);
-           		vendorDaoService.editVendor(existingvendor);
-           		return "redirect:login";
-           		
-           	}else {
-           		return "emailConfirmation";
-           	}
-    }
-    
+   
     
     
   /*  
@@ -216,7 +164,6 @@ public class IndexController {
     public ModelAndView login(@RequestParam(value = "error",required = false) String error,@RequestParam(value = "logout",required=false)String logout)
     {
     	
-    	System.out.println("jfkdsdajfdsjfkds");
     	ModelAndView model=new ModelAndView();
     	if(error!=null)
     	{
@@ -247,22 +194,7 @@ public class IndexController {
 		return "adminlogin";
 	}*/
 	
-	@GetMapping("adminlogin")
-	public String adminLogin(Principal principal,Map<String, Object> vendor)
-	{
-	  	 
-	  	
-	  		return "adminlogin";
-	  	 
-	}
 	
-	@GetMapping("adminpage")
-	public String adminPage(Model model){
-		
-		 model.addAttribute("vendorslist", adminDao.getVendors());
-		return "adminpage";
-		
-	}
 	
 	@GetMapping("accept/{vendor_id}")
 	public String acceptVendor(@PathVariable("vendor_id")int vendor_id)

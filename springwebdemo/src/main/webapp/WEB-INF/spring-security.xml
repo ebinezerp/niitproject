@@ -52,7 +52,7 @@
 			
 	</security:http>
 
-      <security:global-method-security order="2"></security:global-method-security>
+      <!-- <security:global-method-security order="2"></security:global-method-security> -->
 
 
 	<bean id="noOpPasswordEncoder"
@@ -67,7 +67,7 @@
 			<security:jdbc-user-service
 				data-source-ref="dataSource"
 				users-by-username-query="select vendor_email,vendor_password,vendor_active from Vendor where vendor_email=?"
-				authorities-by-username-query="select role from Vendor where vendor_email=?" />
+				authorities-by-username-query="select vendor_email,role from Vendor where vendor_email=?" />
 
 			
 		</security:authentication-provider>
