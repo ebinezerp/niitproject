@@ -30,20 +30,11 @@ public class CartItems {
 	@ManyToOne
 	private Cart cart;
 	@OneToMany(mappedBy = "cartItems", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private List<CartItemIds> cartItemIdsList;
-	@OneToOne
-	private Product product;
+	private List<CartItemIds> cartItemIdsList;	
+	
 
 	public long getCartItemsId() {
 		return cartItemsId;
-	}
-
-	public Product getProduct() {
-		return product;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
 	}
 
 	public void setCartItemsId(long cartItemsId) {

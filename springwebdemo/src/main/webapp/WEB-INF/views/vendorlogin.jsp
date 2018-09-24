@@ -7,7 +7,6 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
-<title>Insert title here</title>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <script
@@ -56,17 +55,17 @@
 	<div style="display: flex; margin-top: 100px">
 		<div style="flex: 2"></div>
 		<div style="flex: 2; border: 2px solid black; padding: 20px">
-			<form action="vendorlogin" class="form" method="POST">
+			<form action="vendor/login" class="form" method="POST">
 				<div style="display: flex">
 					<div style="flex: 1"></div>
 					<div style="flex: 1">
 
 						<div style="margin: 5px">
-							<input type="email" name="email" placeholder="enter email" />
+							<input type="email" name="vendor_email" placeholder="enter email" />
 						</div>
 						<div style="margin: 5px">
 							<input type="password" placeholder="enter password"
-								name="password" />
+								name="vendor_password" />
 						</div>
 
 						<div style="margin: 10px; padding-left: 45px">

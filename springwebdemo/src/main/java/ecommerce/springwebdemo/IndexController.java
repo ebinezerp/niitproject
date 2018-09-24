@@ -90,7 +90,7 @@ public class IndexController {
 
 	}
 
-	@RequestMapping(value = "/admin", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/admin", method = RequestMethod.GET)
 	public ModelAndView adminPage() {
 
 	  ModelAndView model = new ModelAndView();
@@ -100,7 +100,7 @@ public class IndexController {
 	  return model;
 
 	}
-	
+	*/
 	@RequestMapping("aboutus")
 	public String aboutUs(Model model)
 	{

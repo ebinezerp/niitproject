@@ -25,7 +25,7 @@ public class AdminController {
 	  	 
 	}
 	
-	@GetMapping("adminpage")
+	@GetMapping("/admin/adminpage")
 	public String adminPage(Model model){
 		
 		 model.addAttribute("vendorslist", adminDao.getVendors());

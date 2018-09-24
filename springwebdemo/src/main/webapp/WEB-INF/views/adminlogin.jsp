@@ -21,7 +21,7 @@
 		<c:if test="${not empty msg}">
 			<div class="msg">${msg}</div>
 		</c:if>
-    <form method="post" name="adminLoginForm" action="adminloginpagelogin" >
+    <form method="post" name="adminLoginForm" action="admin/adminlogin" >
      <div  class="form-group">
        <input type="text" name="email"/>
      </div>

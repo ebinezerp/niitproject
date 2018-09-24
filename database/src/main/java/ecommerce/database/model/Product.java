@@ -35,7 +35,7 @@ public class Product {
 	@Transient
 	private MultipartFile image;
 
-	@OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<NumberOfProducts> numberOfProducts;
 
 	@ManyToOne

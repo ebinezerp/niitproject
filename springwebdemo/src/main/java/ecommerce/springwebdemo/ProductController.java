@@ -159,8 +159,10 @@ public class ProductController {
 		}
 	}
 
-	@GetMapping(value= {"products","vendorlogin"})
+	@GetMapping(value= {"/vendor/products"})
 	public String displayProducts(HttpSession session,Principal principal) {
+		System.out.println(principal);
+		System.out.println(principal.getName());
 		session.setAttribute("products", productDaoService.getAllProducts(vendorDaoService.getVendorByEmail(principal.getName())));
 		session.setAttribute("vendor",vendorDaoService.getVendorByEmail(principal.getName()));
 		return "products";
@@ -226,4 +228,8 @@ public class ProductController {
 		}
 
 	}
+	
+	
+	
+
 }
