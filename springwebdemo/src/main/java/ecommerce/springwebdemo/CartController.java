@@ -28,167 +28,185 @@ import ecommerce.database.model.cart.CartItems;
 
 @Controller
 public class CartController {
-	
+
 	@Autowired
 	private CartDaoService cartDaoService;
-	
+
 	@Autowired
 	private CustomerDaoService customerDaoService;
-	
+
 	@Autowired
 	private Cart cart;
-	
+
 	@Autowired
 	private Customer customer;
 	
-
+    @Autowired
 	private CartItems cartItems;
-	
+
 	@Autowired
 	private CartItemsDaoService cartItemsDaoService;
 
 	@Autowired
 	private CartItemIds cartItemIds;
-	
+
 	@Autowired
 	private ProductDaoService productDaoService;
-	
+
 	@Autowired
 	private MobileDaoService mobileDaoService;
-	
+
 	@Autowired
 	private NumberOfProducts numberOfProducts;
-	
+
 	@Autowired
 	private NoOfProductsDaoService noOfProductsDaoService;
 
-	
 	@Autowired
 	private CartItemIdsDaoService cartItemIdsDaoService;
-	
+
 	@GetMapping("/customer/addtocart")
-	public String addToCart(Principal principal,HttpServletRequest request)
-	{
-		System.out.println(principal.getName());
-		int productId=Integer.parseInt(request.getParameter("productId"));
-		List<CartItems> cartItemsList=new ArrayList<CartItems>();
-		List<CartItemIds> cartItemIdsList=new ArrayList<CartItemIds>();
-		customer=customerDaoService.getCustomerByEmail(principal.getName());
-		System.out.println(customer.getCustomer_id());
-		Cart cart=cartDaoService.getCartByCustId(customer.getCustomer_id());
-		Product product=null;
-		 if(request.getParameter("productId")!=null)
-		 {
-		    	 product=productDaoService.getProduct(productId);
-		 }else {
-			 return "redirect:/buymobile";
-		 }
-		 int quantity=Integer.parseInt(request.getParameter("numberOfProducts"));
-		 List<NumberOfProducts> numberOfproductsList=noOfProductsDaoService.getNumberOfProducts(productId);
-		if(cart==null)
+	public String addToCart(Principal principal, HttpServletRequest request) {
+
+		
+		long productId=Integer.parseInt(request.getParameter("productId"));
+		int quantity=Integer.parseInt(request.getParameter("numberOfProducts"));
+		 int unitprice=productDaoService.getProduct(productId).getPrice();
+		 Product product=productDaoService.getProduct(productId);
+		 
+		if(checkAvailabilityOfProducts(productId, quantity)==true)
 		{
-		    cart=new Cart();
-		    cart.setCustomer(customer);
-		    cartItems.setUnitPrice(product.getPrice());
-		   
-		    cartItems.setQuantity(quantity);
-		    cartItems.setTotalPrice(quantity*product.getPrice());
-		    cartItems.setCart(cart);
-		   
-		    if(numberOfproductsList.size()>quantity)
-		    {
-		    	for(int i=0;i<quantity;i++)
-		    	{
-		    		cartItemIds.setNumberOfProducts(numberOfproductsList.get(i));
-		    		cartItemIds.setCartItems(cartItems);
-		    		cartItemIdsList.add(cartItemIds);
-		    	}
-		    	cartItems.setCartItemIdsList(cartItemIdsList);
-		    	cartItemsList.add(cartItems);
-		    	cart.setCartItemsList(cartItemsList);
-		    	cart.setNetPrice(quantity*product.getPrice());
-		    	cart.setNoOfItems(quantity);
-		    	cartDaoService.addCart(cart);
-		    	
-		    	return "cart";
-		    }
-		    else {
-				return "redirect:/buymobile";
-			}
+			customer=customerDaoService.getCustomerByEmail(principal.getName());
+			cart=cartDaoService.getCartByCustId(customer.getCustomer_id());
+			if(cart==null)
+			{
+				cart=new Cart();
+				 cartItems=new CartItems();
+	                List<CartItemIds> cartItemIdsList=new ArrayList<CartItemIds>();
+	                List<CartItems> cartItemsList=new ArrayList<CartItems>();
+	                List<NumberOfProducts> numberOfProductsList=noOfProductsDaoService.getNumberOfProducts(productId);
+	                
+	                for(int i=0;i<quantity;i++)
+	                {
+	                   cartItemIds=new CartItemIds();	
+	                   numberOfProducts=new NumberOfProducts();
+	                   numberOfProducts=numberOfProductsList.get(i);
+	                   numberOfProducts.setBought(true);
+	                   cartItemIds.setNumberOfProducts(numberOfProducts);
+	                   cartItemIds.setCartItems(cartItems);
+	                   cartItemIdsList.add(cartItemIds);				                	
+	                }
+	                cartItems.setUnitPrice(unitprice);
+	                cartItems.setTotalPrice(unitprice*quantity);
+	                cartItems.setQuantity(quantity);
+	                cartItems.setCartItemIdsList(cartItemIdsList);
+	                cartItems.setCart(cart);
+	                cartItemsList.add(cartItems);
+	                cart.setCartItemsList(cartItemsList);
+	                cart.setCustomer(customer);
+	                cart.setNetPrice(quantity*unitprice);
+	                cart.setNoOfItems(quantity);
+	                cartDaoService.addCart(cart);
+	                
+	                return "cart";
+				
+				
+			}else {
+				
+			       cartItems=checkIfProductAlreadyExists(productId, cart);
+				
+			              if(cartItems!=null)
+			                {
+			            	  
+			            	  
+			            	  List<CartItemIds> cartItemIdsList=new ArrayList<CartItemIds>();
+				              List<CartItems> cartItemsList=new ArrayList<CartItems>();
+				              cartItemsList=cart.getCartItemsList();
+				              int position=cartItemsList.indexOf(cartItems);
+				              List<NumberOfProducts> numberOfProductsList=noOfProductsDaoService.getNumberOfProducts(productId);
+				               cartItemIdsList=cartItemIdsDaoService.getAllRelatedCartItemIds(cartItems.getCartItemsId());
+				               for(int i=0;i<quantity;i++)
+				                {
+				                   cartItemIds=new CartItemIds();
+				                   NumberOfProducts numberOfProducts=new NumberOfProducts();
+				                   numberOfProducts=numberOfProductsList.get(i);
+				                   numberOfProducts.setBought(true);
+				                   cartItemIds.setNumberOfProducts(numberOfProducts);
+				                   cartItemIds.setCartItems(cartItems);
+				                   cartItemIdsList.add(cartItemIds);				                	
+				                }
+				               cartItems.setCartItemIdsList(cartItemIdsList);
+				               cartItemsList.add(position, cartItems);
+			            	  cart.setCartItemsList(cartItemsList);
+				                cart.setNetPrice((quantity*unitprice)+cart.getNetPrice());
+				                cart.setNoOfItems(quantity+cart.getNoOfItems());
+			            	  cartDaoService.updateCart(cart);	  
+			            	  
+				              return "cart";
+			                 }else {
+				
+				                cartItems=new CartItems();
+				                List<CartItemIds> cartItemIdsList=new ArrayList<CartItemIds>();
+				                List<CartItems> cartItemsList=new ArrayList<CartItems>();
+				                List<NumberOfProducts> numberOfProductsList=noOfProductsDaoService.getNumberOfProducts(productId);
+				                for(int i=0;i<quantity;i++)
+				                {
+				                   cartItemIds=new CartItemIds();
+				                   numberOfProducts=new NumberOfProducts();
+				                   numberOfProducts=numberOfProductsList.get(i);
+				                   numberOfProducts.setBought(true);
+				                   cartItemIds.setNumberOfProducts(numberOfProducts);
+				                   cartItemIds.setCartItems(cartItems);
+				                   cartItemIdsList.add(cartItemIds);				                	
+				                }
+				                cartItems.setUnitPrice(unitprice);
+				                cartItems.setTotalPrice(unitprice*quantity);
+				                cartItems.setQuantity(quantity);
+				                cartItems.setCartItemIdsList(cartItemIdsList);
+				                cartItems.setCart(cart);
+				                cartItemsList.add(cartItems);
+				                cart.setCartItemsList(cartItemsList);
+				                cart.setNetPrice((quantity*unitprice)+cart.getNetPrice());
+				                cart.setNoOfItems(quantity+cart.getNoOfItems());
+				                cartDaoService.updateCart(cart);
+				                return "cart";
+			                }
+			
+			
+			      }
+			
 		}else {
 			
-			
-			boolean b=false;
-			List<CartItems> cartItemsList1=cart.getCartItemsList();
-			NumberOfProducts numberOfProducts=new NumberOfProducts();
-			for(CartItems c:cartItemsList1)
-			{
-			    if(c.getCartItemIdsList().get(0).getNumberOfProducts().getProduct().getProductId()==productId)
-			    {
-			    	c.setQuantity(c.getQuantity()+quantity);
-			    	c.setTotalPrice(c.getTotalPrice()+(product.getPrice()*quantity));
-			    	CartItemIds cartItemIds=new CartItemIds();
-			    	cartItemIds.setCartItems(c);
-			    	if(numberOfproductsList.size()>quantity)
-				    {
-				    	for(int i=0;i<quantity;i++)
-				    	{
-				    		cartItemIds.setNumberOfProducts(numberOfproductsList.get(i));
-				    		cartItemIds.setCartItems(cartItems);
-				    		cartItemIdsList.add(cartItemIds);
-				    	}
-				    	cartItems.setCartItemIdsList(cartItemIdsList);
-				    	cartItemsList.add(cartItems);
-				    	cart.setCartItemsList(cartItemsList);
-				    	cart.setNetPrice(quantity*product.getPrice());
-				    	cart.setNoOfItems(quantity);
-				    	cartDaoService.addCart(cart);
-				    	
-				    	return "cart";
-				    }
-				    else {
-						return "redirect:/buymobile";
-					}
-			        cartItemIds.setNumberOfProducts(numberOfProducts);
-			    	
-			    }
-			  
-			}
-			
-			
-			
-			
-			
-			
-			/*cartItems.setUnitPrice(product.getPrice());
-		    int quantity=Integer.parseInt(request.getParameter("numberOfProducts"));
-		    cartItems.setQuantity(quantity);
-		    cartItems.setTotalPrice(quantity*product.getPrice());
-		    List<NumberOfProducts> numberOfproductsList=noOfProductsDaoService.getNumberOfProducts(productId);
-		    if(numberOfproductsList.size()>quantity)
-		    {
-		    	cartItemIdsList=cartItemsDaoService.getCartItemByCartId(cart.getCartId()).getCartItemIdsList();
-		    	
-		    	for(int i=0;i<quantity;i++)
-		    	{
-		    		cartItemIds.setNumberOfProducts(numberOfproductsList.get(i));
-		    		cartItemIds.setCartItems(cartItems);
-		    		cartItemIdsList.add(cartItemIds);
-		    	}
-		    	cartItems.setCartItemIdsList(cartItemIdsList);
-		    	
-		    	cartItemsList=cartDaoService.getCartByCustId(customer.getCustomer_id()).getCartItemsList();
-		    	cartItemsList.add(cartItems);
-		    	
-		    	cart.setCartItemsList(cartItemsList);
-		    	
-		    	cart.setNetPrice(cartDaoService.getCartByCustId(customer.getCustomer_id()).getNetPrice()+(quantity*product.getPrice()));
-		    	cart.setNoOfItems(cartDaoService.getCartByCustId(customer.getCustomer_id()).getNoOfItems()+quantity);
-		    	cartDaoService.updateCart(cart);	*/	    	
-		    	return "cart";
-		    }
-		    		
+			return "buymobile";
 		}
 		
+		
+		
+		
+	}
+	
+	public CartItems checkIfProductAlreadyExists(long productId,Cart cart)
+	{
+       List<CartItems> cartItemsList=cart.getCartItemsList();
+       for(CartItems c:cartItemsList)
+       {
+    	   if(c.getCartItemIdsList().get(0).getNumberOfProducts().getProduct().getProductId()==productId)
+    	   {
+    		   return c;
+    	   }
+       }
+       return null;
+	}
+	
+	
+	public boolean checkAvailabilityOfProducts(long productId,int quantity)
+	{
+		if(noOfProductsDaoService.getNumberOfProducts(productId).size()>=quantity)
+		{
+			return true;
+		}else {
+			return false;
+		}
 	}
 
+}

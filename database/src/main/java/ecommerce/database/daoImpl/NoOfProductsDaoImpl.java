@@ -44,7 +44,7 @@ public class NoOfProductsDaoImpl implements NoOfProductsDaoService{
 	}
 
 	@Override
-	public NumberOfProducts getProductIdByNoOfproductsId(long productNumber) {
+	public NumberOfProducts getNumberOfProductsByNoOfproductsId(long productNumber) {
 		// TODO Auto-generated method stub
 		try {
 		return	(NumberOfProducts)sessionFactory.getCurrentSession().createQuery("from NumberOfProducts where productNumber=:id").setParameter("id",productNumber).getSingleResult();
