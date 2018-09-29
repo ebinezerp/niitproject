@@ -84,4 +84,18 @@ public class CartItemsDaoImpl implements CartItemsDaoService {
 
 	}
 
+	@Override
+	public CartItems getCartItemByCartId(long cartId) {
+		// TODO Auto-generated method stub
+		try {
+		return 	(CartItems)sessionFactory.getCurrentSession().createQuery("from CartItems where cart_cartId=:id").setParameter("id", cartId).getSingleResult();
+		} catch (HibernateException e) {
+			// TODO: handle exception
+			return null;
+		}
+		
+		
+		
+	}
+
 }

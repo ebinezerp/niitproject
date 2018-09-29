@@ -168,7 +168,7 @@ public class ProductController {
 		return "products";
 	}
 
-	@GetMapping("productdetails/{productId}")
+	@GetMapping("/vendor/productdetails/{productId}")
 	public String getProductDetails(@PathVariable("productId")long productId,Model model,HttpServletRequest request)
 	{
 		String path=request.getContextPath();

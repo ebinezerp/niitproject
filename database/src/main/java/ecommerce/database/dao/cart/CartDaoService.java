@@ -1,7 +1,10 @@
 package ecommerce.database.dao.cart;
 
+import java.util.List;
+
 import ecommerce.database.model.Customer;
 import ecommerce.database.model.cart.Cart;
+import ecommerce.database.model.cart.CartItems;
 
 public interface CartDaoService {
 

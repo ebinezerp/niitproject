@@ -55,7 +55,7 @@ public class VendorMobileController {
 	}
 	
 	
-	@GetMapping("editmobiledetails/{productId}")
+	@GetMapping("/vendor/editmobiledetails/{productId}")
 	public String editProduct(@PathVariable("productId") long productId, Model model) {
 		model.addAttribute("mobile", mobileDaoService.getMobile(productId));
 		return "editmobile";

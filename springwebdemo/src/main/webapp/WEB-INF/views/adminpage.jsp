@@ -22,9 +22,9 @@
 </head>
 <body>
 <!-- <h1>hiiiiiiiiiiiiiiiii</h1> -->
-
-
-<h1>Deactivated</h1>
+<c:set value="${pageContext.request.contextPath}" var="contextPath"></c:set>
+<div><a href="${contextPath }/admin/logout"><button type="button">Logout</button></a></div>
+<h1>eactivated</h1>
 
 <table id="tablepagination" class="table table-striped table-bordered " cellspacing="0" width="100%">
  <thead>
@@ -82,7 +82,7 @@
    </c:forEach>
  </tbody>
  </table>
-
+hii
 
 </body>
 </html>

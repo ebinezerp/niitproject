@@ -1,5 +1,8 @@
 package ecommerce.database.daoImpl.cart;
 
+import java.util.List;
+
+import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 
 import org.hibernate.HibernateException;
@@ -9,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import ecommerce.database.dao.cart.CartDaoService;
 import ecommerce.database.model.cart.Cart;
+import ecommerce.database.model.cart.CartItems;
 
 @Component
 @Transactional
@@ -59,18 +63,16 @@ public class CartDaoImpl implements CartDaoService {
 
 	@Override
 	public Cart getCartByCustId(long customerId) {
-		// TODO Auto-generated method stub
+		System.out.println(customerId);
 		try {
 			return (Cart)sessionFactory.getCurrentSession().createQuery("from Cart where customer_customer_id=:id").setParameter("id",customerId).getSingleResult();
-		} catch (HibernateException e) {
+		} catch (HibernateException | NoResultException e) {
 			// TODO: handle exception
 			return null;	
 		}
-		
-		
-		
+
 	}
-
 	
-
+	
+	
 }

@@ -13,6 +13,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 </head>
 <body>
+<c:set value="${pageContext.request.contextPath}" var="contextPath"></c:set>
  <nav class="navbar navbar-expand-sm bg-dark navbar-dark" >
      <div class="container-fluid">
         <div class="navbar-header">
@@ -50,8 +51,8 @@
 				    <img class="card-img-top" src='<spring:url value="/resources/images/products/${product.productId }.jpg"></spring:url>' alt="Card image cap">
 				     <div class="card-body" >
 				       <h5 class="card-title">${product.product_brand } ${product.product_model } ${product.product_color }</h5>
-				        <a href="productdetails/${product.productId }"><button class="btn btn-info">view</button></a>
-				        <a href="editmobiledetails/${product.productId }"><button
+				        <a href="${contextPath }/vendor/productdetails/${product.productId }"><button class="btn btn-info">view</button></a>
+				        <a href="${contextPath }/vendor/editmobiledetails/${product.productId }"><button
 						class="btn btn-warning">edit</button></a>
 				     </div>
 				    </div>

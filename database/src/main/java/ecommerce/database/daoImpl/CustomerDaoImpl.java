@@ -52,4 +52,15 @@ public class CustomerDaoImpl implements CustomerDaoService{
 		}
 	}
 
+	@Override
+	public Customer getCustomerByEmail(String email) {
+		// TODO Auto-generated method stub
+		try {
+			return (Customer)sessionFactory.getCurrentSession().createQuery("from Customer where customer_email=:email").setParameter("email", email).getSingleResult();
+		} catch (HibernateException e) {
+			// TODO: handle exception
+			return null;
+		}
+	}
+
 }

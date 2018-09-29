@@ -164,6 +164,7 @@
 					<div class="card-body">
 						<h5 class="card-title">${product.product_brand }
 							${product.product_model } ${product.product_color }</h5>
+							<button type="button"><a href="display/${product.productId }">Buy</a></button>
 					</div>
 				</div>
 			</c:forEach>

@@ -40,11 +40,17 @@
 	</bean>
 
 
-	<security:http auto-config="true" use-expressions="true" pattern="/vendor/**" authentication-manager-ref="vendorAuthManager">
-		<security:intercept-url pattern="/index"
-			access="anonymous" />
-		<security:form-login login-page="/vendorlogin" login-processing-url="/vendor/login"
-			default-target-url="/vendor/products" username-parameter="vendor_email"
+	<!-- vendor security code -->
+
+	<security:http auto-config="true" use-expressions="true"
+		pattern="/vendor/**" authentication-manager-ref="vendorAuthManager">
+		<security:intercept-url
+			pattern="/vendor/products" access="authenticated" />
+
+		<security:form-login login-page="/vendorlogin"
+			login-processing-url="/vendor/login"
+			default-target-url="/vendor/products"
+			username-parameter="vendor_email"
 			password-parameter="vendor_password"
 			authentication-failure-forward-url="/vendorlogin" />
 
@@ -53,42 +59,84 @@
 		<security:access-denied-handler
 			error-page="/403" />
 		<security:logout logout-url="/logout"
-			logout-success-url="/index" />			
+			logout-success-url="/index" />
 	</security:http>
-	
-	<security:authentication-manager id="vendorAuthManager">
+
+	<security:authentication-manager
+		id="vendorAuthManager">
 		<security:authentication-provider>
 			<security:password-encoder
 				ref="noOpPasswordEncoder"></security:password-encoder>
 			<security:jdbc-user-service
 				data-source-ref="dataSource"
 				users-by-username-query="select vendor_email,vendor_password,vendor_active from Vendor where vendor_email=?"
-				authorities-by-username-query="select vendor_email,role from Vendor where vendor_email=?" />			
+				authorities-by-username-query="select vendor_email,role from Vendor where vendor_email=?" />
 		</security:authentication-provider>
 	</security:authentication-manager>
 
-<security:http auto-config="true" use-expressions="true" pattern="/admin/**" authentication-manager-ref="adminAuthManager">
-		<security:intercept-url pattern="/index"
-			access="anonymous" />
-		<security:form-login login-page="/adminlogin" login-processing-url="/admin/adminlogin"
+
+
+	<!-- admin security code -->
+
+	<security:http auto-config="true" use-expressions="true"
+		pattern="/admin/**" authentication-manager-ref="adminAuthManager">
+		<security:intercept-url
+			pattern="/admin/adminpage" access="authenticated" />
+
+		<security:form-login login-page="/adminlogin"
+			login-processing-url="/admin/adminlogin"
 			default-target-url="/admin/adminpage" username-parameter="email"
 			password-parameter="password"
 			authentication-failure-forward-url="/adminlogin" />
 		<security:csrf disabled="true" />
 		<security:access-denied-handler
 			error-page="/403" />
-		<security:logout logout-url="/logout"
-			logout-success-url="/index" />		
+		<security:logout logout-url="/admin/logout"
+			logout-success-url="/index" />
 	</security:http>
-	
-	<security:authentication-manager id="adminAuthManager">
+
+	<security:authentication-manager
+		id="adminAuthManager">
 		<security:authentication-provider>
 			<security:password-encoder
 				ref="noOpPasswordEncoder"></security:password-encoder>
 			<security:jdbc-user-service
 				data-source-ref="dataSource"
 				users-by-username-query="select email,password,active from admin where email=?"
-				authorities-by-username-query="select email,role from admin where email=?" />			
+				authorities-by-username-query="select email,role from admin where email=?" />
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+	<security:http auto-config="true" use-expressions="true"
+		pattern="/customer/**" authentication-manager-ref="custAuthManager">
+		<security:intercept-url
+			pattern="/customer/buymobile" access="authenticated" />
+
+
+		<!-- customer security code -->
+
+		<security:form-login login-page="/customerlogin"
+			login-processing-url="/customer/customerlogin"
+			default-target-url="/index"
+			username-parameter="customer_email"
+			password-parameter="customer_password"
+			authentication-failure-forward-url="/customerlogin" />
+		<security:csrf disabled="true" />
+		<security:access-denied-handler
+			error-page="/403" />
+		<security:logout logout-url="/customer/logout"
+			logout-success-url="/index" />
+	</security:http>
+
+	<security:authentication-manager
+		id="custAuthManager">
+		<security:authentication-provider>
+			<security:password-encoder
+				ref="noOpPasswordEncoder"></security:password-encoder>
+			<security:jdbc-user-service
+				data-source-ref="dataSource"
+				users-by-username-query="select customer_email,customer_password,active from customer where customer_email=?"
+				authorities-by-username-query="select customer_email,role from customer where customer_email=?" />
 		</security:authentication-provider>
 	</security:authentication-manager>
 </beans>
