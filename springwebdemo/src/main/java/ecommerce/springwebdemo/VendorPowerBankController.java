@@ -30,7 +30,7 @@ public class VendorPowerBankController {
 	@Autowired
 	private SaveImage saveImage;
 	
-	@PostMapping("addpowerbank")
+	@PostMapping("/vendor/addpowerbank")
 	public String addMobile(@ModelAttribute("powerbank") PowerBank powerBank,HttpSession session,HttpServletRequest request)
 	{
 		powerBank.setVendor((Vendor)session.getAttribute("vendor"));
@@ -53,14 +53,14 @@ public class VendorPowerBankController {
 	}
 	
 	
-	@GetMapping("editpowerbankdetails/{productId}")
+	@GetMapping("/vendor/editpowerbankdetails/{productId}")
 	public String editProduct(@PathVariable("productId") long productId, Model model) {
-		model.addAttribute("ssd", powerBankDaoService.retrievePowerBankById(productId));
+		model.addAttribute("powerbank", powerBankDaoService.retrievePowerBankById(productId));
 		return "editpowerbank";
 	}
 	
 
-	@PostMapping("editpowerbankdetails")
+	@PostMapping("/vendor/editpowerbankdetails")
 	public String editMobileDetails(@ModelAttribute("powerbank") PowerBank powerBank, HttpServletRequest request) {
 		if (!powerBank.getImage().isEmpty()) {
 			saveImage.saveImage(powerBank, request);

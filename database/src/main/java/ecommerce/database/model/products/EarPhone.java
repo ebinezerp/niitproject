@@ -13,6 +13,7 @@ public class EarPhone extends Product{
 	
 	private boolean wireless;
 	private boolean microphone;
+	
 	public boolean isWireless() {
 		return wireless;
 	}

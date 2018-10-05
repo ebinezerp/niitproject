@@ -31,9 +31,41 @@ public class BeforeCartController {
 		{
 			model.addAttribute("mobile", productDaoService.getProduct(productId));
 			return "buymobile";
-		}else {
+		}else if(productDaoService.getProduct(productId).getSubCategory().getSubCategory_name().equals("laptop")){
+			model.addAttribute("laptop", productDaoService.getProduct(productId));
 			
-			return "";
+			return "buylaptop";
+		}else if(productDaoService.getProduct(productId).getSubCategory().getSubCategory_name().equals("refrigerator")){
+			model.addAttribute("refrigerator", productDaoService.getProduct(productId));
+		
+			return "buyrefrigerator";
+		}else if(productDaoService.getProduct(productId).getSubCategory().getSubCategory_name().equals("airconditioner")){
+			model.addAttribute("airconditioner", productDaoService.getProduct(productId));
+	
+			return "buyairconditioner";
+		}else if(productDaoService.getProduct(productId).getSubCategory().getSubCategory_name().equals("television")){
+			model.addAttribute("television", productDaoService.getProduct(productId));
+			
+			return "buytelevision";
+		}else if(productDaoService.getProduct(productId).getSubCategory().getSubCategory_name().equals("earphones")){
+			model.addAttribute("earphones", productDaoService.getProduct(productId));
+		
+			return "buyearphones";
+		}else if(productDaoService.getProduct(productId).getSubCategory().getSubCategory_name().equals("ssd")){
+			model.addAttribute("ssd", productDaoService.getProduct(productId));
+			
+			return "buyssd";
+		}else if(productDaoService.getProduct(productId).getSubCategory().getSubCategory_name().equals("powerbank")){
+			model.addAttribute("powerbank", productDaoService.getProduct(productId));
+			
+			return "buypowerbank";
+		}else if(productDaoService.getProduct(productId).getSubCategory().getSubCategory_name().equals("watch")){
+			model.addAttribute("watch", productDaoService.getProduct(productId));
+			
+			return "buywatch";
+		}else{
+			model.addAttribute("shoe", productDaoService.getProduct(productId));
+			return "buyshoe";
 		}
 	
 	}

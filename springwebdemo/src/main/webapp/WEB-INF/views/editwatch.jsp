@@ -77,7 +77,7 @@
 				placeholder="enter analog or digital"  />
 		</div>	
 		<div class="form-group">
-			<springform:input path="strapType : String" class="form-control"
+			<springform:input path="strapType" class="form-control"
 				placeholder="enter strap type"  />
 		</div>	
 		<div class="form-group">

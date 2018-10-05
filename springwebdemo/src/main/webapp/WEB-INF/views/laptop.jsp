@@ -19,7 +19,7 @@
 <body>
 
 	<springform:form method="POST" action="addlaptop"
-		modelAttribute="laptop">
+		modelAttribute="laptop"  enctype="multipart/form-data">
 		<springform:input path="subCategory.subCategory_id" type="hidden"
 			value="${subCategoryId}" />
 
@@ -78,6 +78,9 @@
 		<div class="form-group">
 			<springform:input path="warrantyInMonths" class="form-control"
 				placeholder="enter warranty in months"  />
+		</div>
+		<div class="form-group">
+		  <springform:input path="image" type="file"/>
 		</div>
 		<input type="submit" value="Submit">
 	</springform:form>

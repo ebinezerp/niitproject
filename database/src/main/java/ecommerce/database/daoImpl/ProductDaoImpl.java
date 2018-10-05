@@ -63,6 +63,7 @@ public class ProductDaoImpl implements ProductDaoService{
 	public List<Product> getAllProducts(Vendor vendor) {
 		// TODO Auto-generated method stub
 		try {
+			System.out.println(vendor.getVendor_id());
          return sessionFactory.getCurrentSession().createQuery("from Product where vendor_vendor_id=:id and deleted=false").setParameter("id", vendor.getVendor_id()).list();
 		}catch (HibernateException e) {
 			// TODO: handle exception

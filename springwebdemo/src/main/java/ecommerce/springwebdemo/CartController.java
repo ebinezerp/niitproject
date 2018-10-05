@@ -3,11 +3,13 @@ package ecommerce.springwebdemo;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.sun.mail.util.QDecoderStream;
@@ -66,17 +68,18 @@ public class CartController {
 	private CartItemIdsDaoService cartItemIdsDaoService;
 
 	@GetMapping("/customer/addtocart")
-	public String addToCart(Principal principal, HttpServletRequest request) {
+	public String addToCart(Principal principal, HttpServletRequest request,Model model) {
 
 		
 		long productId=Integer.parseInt(request.getParameter("productId"));
 		int quantity=Integer.parseInt(request.getParameter("numberOfProducts"));
 		 int unitprice=productDaoService.getProduct(productId).getPrice();
 		 Product product=productDaoService.getProduct(productId);
+		 customer=customerDaoService.getCustomerByEmail(principal.getName());
+		 
 		 
 		if(checkAvailabilityOfProducts(productId, quantity)==true)
 		{
-			customer=customerDaoService.getCustomerByEmail(principal.getName());
 			cart=cartDaoService.getCartByCustId(customer.getCustomer_id());
 			if(cart==null)
 			{
@@ -108,7 +111,7 @@ public class CartController {
 	                cart.setNoOfItems(quantity);
 	                cartDaoService.addCart(cart);
 	                
-	                return "cart";
+	                return "redirect:/customer/cart";
 				
 				
 			}else {
@@ -142,7 +145,7 @@ public class CartController {
 				                cart.setNoOfItems(quantity+cart.getNoOfItems());
 			            	  cartDaoService.updateCart(cart);	  
 			            	  
-				              return "cart";
+				              return "redirect:/customer/cart";
 			                 }else {
 				
 				                cartItems=new CartItems();
@@ -169,7 +172,7 @@ public class CartController {
 				                cart.setNetPrice((quantity*unitprice)+cart.getNetPrice());
 				                cart.setNoOfItems(quantity+cart.getNoOfItems());
 				                cartDaoService.updateCart(cart);
-				                return "cart";
+				                return "redirect:/customer/cart";
 			                }
 			
 			
@@ -177,7 +180,7 @@ public class CartController {
 			
 		}else {
 			
-			return "buymobile";
+			return "index";
 		}
 		
 		
@@ -207,6 +210,32 @@ public class CartController {
 		}else {
 			return false;
 		}
+	}
+	
+	
+	@GetMapping("/customer/cart")
+	public String displayCart(Principal principal,Model model)
+	{
+		Customer customer=customerDaoService.getCustomerByEmail(principal.getName());
+		Cart cart=cartDaoService.getCartByCustId(customer.getCustomer_id());
+		List<Product> products=new ArrayList<Product>();
+		List<CartItems> cartItems=new Stack<CartItems>();
+		cartItems=cartItemsDaoService.getCartItemsByCartId(cart.getCartId());
+		List<CartItemIds> cartItemIds=new ArrayList<CartItemIds>();
+		
+		List<String> subcategoryname=new ArrayList<String>();
+		
+		for(CartItems items:cartItems)
+		{
+			cartItemIds=cartItemIdsDaoService.getAllRelatedCartItemIds(items.getCartItemsId());
+			products.add(cartItemIds.get(0).getNumberOfProducts().getProduct());
+		    subcategoryname.add(cartItemIds.get(0).getNumberOfProducts().getProduct().getSubCategory().getSubCategory_name());
+		}
+		
+		model.addAttribute("product",products);
+		model.addAttribute("name",subcategoryname);
+		model.addAttribute("cartitem",cartItems);
+		return "cart";
 	}
 
 }

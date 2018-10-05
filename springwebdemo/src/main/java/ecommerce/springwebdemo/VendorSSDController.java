@@ -30,7 +30,7 @@ public class VendorSSDController {
 	@Autowired
 	private SaveImage saveImage;
 	
-	@PostMapping("addssd")
+	@PostMapping("/vendor/addssd")
 	public String addSSD(@ModelAttribute("ssd") SSD ssd,HttpSession session,HttpServletRequest request)
 	{
 		ssd.setVendor((Vendor)session.getAttribute("vendor"));
@@ -53,14 +53,14 @@ public class VendorSSDController {
 	}
 	
 	
-	@GetMapping("editssddetails/{productId}")
+	@GetMapping("/vendor/editssddetails/{productId}")
 	public String editSSD(@PathVariable("productId") long productId, Model model) {
 		model.addAttribute("ssd", ssdDaoService.retrieveSSDById(productId));
 		return "editssd";
 	}
 	
 
-	@PostMapping("editssddetails")
+	@PostMapping("/vendor/editssddetails")
 	public String editSSDDetails(@ModelAttribute("ssd") SSD ssd, HttpServletRequest request) {
 		if (!ssd.getImage().isEmpty()) {
 			saveImage.saveImage(ssd, request);

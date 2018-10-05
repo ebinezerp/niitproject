@@ -21,18 +21,15 @@
         </div>
       
         <ul class="navbar-nav" >
-            <li class="nav-item"><a class="nav-link" href="profile">profile</a></li>
-            <li class="nav-item"><a class="nav-link" href="editvendor">edit-profile</a></li>
-            <li class="nav-item"><a class="nav-link" href="addproduct">add-products</a></li>
+            <li class="nav-item"><a class="nav-link" href="${contextPath }/vendor/vendorprofile">profile</a></li>
+            <li class="nav-item"><a class="nav-link" href="${contextPath }/vendor/editvendor">edit-profile</a></li>
+            <li class="nav-item"><a class="nav-link" href="${contextPath }/vendor/addproduct">add-products</a></li>
             <li class="active nav-item"><a class="nav-link" href="products">view products</a></li>
            <li>
              <div class="dropdown " style="padding-top:10px">
               <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"><span class="caret"></span></button>             
               <div class="dropdown-menu dropdown-menu-right">
-              <a class="dropdown-item" href="editvendor">edit</a>
-              <a class="dropdown-item" href="addproduct">addProducts</a>
-              <a class="dropdown-item" href="products">view products</a>
-              <a class="dropdown-item" href="#">logout</a>
+              <a class="dropdown-item" href="${contextPath }/vendor/logout">logout</a>
               </div>
             
             </div>
@@ -48,17 +45,15 @@
 			<c:forEach items="${products }" var="product">
 		
 				   <div class="card" style="width: 12rem">
-				    <img class="card-img-top" src='<spring:url value="/resources/images/products/${product.productId }.jpg"></spring:url>' alt="Card image cap">
+				    <img class="card-img-top" src='${contextPath }/resources/images/products/${product.productId }.jpg' alt="Card image cap">
 				     <div class="card-body" >
 				       <h5 class="card-title">${product.product_brand } ${product.product_model } ${product.product_color }</h5>
 				        <a href="${contextPath }/vendor/productdetails/${product.productId }"><button class="btn btn-info">view</button></a>
-				        <a href="${contextPath }/vendor/editmobiledetails/${product.productId }"><button
+				        <a href="${contextPath }/vendor/editproductdetails/${product.productId }"><button
 						class="btn btn-warning">edit</button></a>
 				     </div>
 				    </div>
-				
-				
-				
+				    				
 			</c:forEach>
 
 

@@ -29,7 +29,7 @@ public class VendorShoeController {
 	@Autowired
 	private SaveImage saveImage;
 	
-	@PostMapping("addshoe")
+	@PostMapping("/vendor/addshoe")
 	public String addShoes(@ModelAttribute("shoe") Shoe shoe,HttpSession session,HttpServletRequest request)
 	{
 		shoe.setVendor((Vendor)session.getAttribute("vendor"));
@@ -52,14 +52,14 @@ public class VendorShoeController {
 	}
 	
 	
-	@GetMapping("editshoedetails/{productId}")
+	@GetMapping("/vendor/editshoedetails/{productId}")
 	public String editShoes(@PathVariable("productId") long productId, Model model) {
 		model.addAttribute("shoe",shoeDaoService.retrieveShoesById(productId));
-		return "editssd";
+		return "editshoe";
 	}
 	
 
-	@PostMapping("editshoedetails")
+	@PostMapping("/vendor/editshoedetails")
 	public String editShoeDetails(@ModelAttribute("shoe") Shoe shoe, HttpServletRequest request) {
 		if (!shoe.getImage().isEmpty()) {
 			saveImage.saveImage(shoe, request);

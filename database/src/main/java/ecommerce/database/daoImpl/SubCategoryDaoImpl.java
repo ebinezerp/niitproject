@@ -68,6 +68,58 @@ public class SubCategoryDaoImpl implements SubCategoryDaoService{
 		
 		
 	}
+
+
+
+	@Override
+	public List<SubCategory> getSubCategoriesOfElectronics() {
+		// TODO Auto-generated method stub
+		try {
+		return	sessionFactory.getCurrentSession().createQuery("from SubCategory where category_category_id=1").list();
+		} catch (HibernateException e) {
+			// TODO: handle exception
+			return null;
+		}
+	}
+
+
+
+	@Override
+	public List<SubCategory> getSubCategoriesOfHomeAppliances() {
+		// TODO Auto-generated method stub
+		try {
+			return	sessionFactory.getCurrentSession().createQuery("from SubCategory where category_category_id=2").list();
+			} catch (HibernateException e) {
+				// TODO: handle exception
+				return null;
+			}
+	}
+
+
+
+	@Override
+	public List<SubCategory> getSubCatgoriesOfAccessories() {
+		// TODO Auto-generated method stub
+		try {
+			return	sessionFactory.getCurrentSession().createQuery("from SubCategory where category_category_id=3").list();
+			} catch (HibernateException e) {
+				// TODO: handle exception
+				return null;
+			}
+	}
+
+
+
+	@Override
+	public List<SubCategory> getSubCategoriesOFFashion() {
+		// TODO Auto-generated method stub
+		try {
+			return	sessionFactory.getCurrentSession().createQuery("from SubCategory where category_category_id=4").list();
+			} catch (HibernateException e) {
+				// TODO: handle exception
+				return null;
+			}
+	}
 }
 
 

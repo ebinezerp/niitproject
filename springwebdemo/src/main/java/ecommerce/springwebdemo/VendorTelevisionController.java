@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -21,6 +22,7 @@ import ecommerce.database.model.Vendor;
 import ecommerce.database.model.products.AirConditioner;
 import ecommerce.database.model.products.Television;
 
+@Controller
 public class VendorTelevisionController {
 	
 	@Autowired
@@ -33,8 +35,8 @@ public class VendorTelevisionController {
 	private ProductDaoService productDaoService;
 	
 	
-	@PostMapping("addtelevision")
-	public String addRefrigerator(@ModelAttribute("television")Television television,HttpServletRequest request,HttpSession session)
+	@PostMapping("/vendor/addtelevision")
+	public String addTelevision(@ModelAttribute("television")Television television,HttpServletRequest request,HttpSession session)
 	{
 		television.setVendor((Vendor)session.getAttribute("vendor"));
 		List<NumberOfProducts> noOfProducts=listOfProducts(television);
@@ -52,15 +54,15 @@ public class VendorTelevisionController {
 	}
 
 	
-	@GetMapping("edittelevisiondetails/{productId}")
+	@GetMapping("/vendor/edittelevisiondetails/{productId}")
 	public String editProduct(@PathVariable("productId")long productId, Model model)
 	{
-		model.addAttribute("refrigerator", televisionDaoService.retrieveTelevisionById(productId));
-		return "editairconditioner";
+		model.addAttribute("television", televisionDaoService.retrieveTelevisionById(productId));
+		return "edittelevision";
 	}
 	
-	@PostMapping("editairconditionerdetails")
-	public String editMobileDetails(@ModelAttribute("airconditioner") Television television, HttpServletRequest request) {
+	@PostMapping("/vendor/edittelevisiondetails")
+	public String editMobileDetails(@ModelAttribute("television") Television television, HttpServletRequest request) {
 		if (!television.getImage().isEmpty()) {
 			saveImage.saveImage(television, request);
 		}
@@ -69,7 +71,7 @@ public class VendorTelevisionController {
 			return "redirect:products";
 
 		} else {
-			return "editairconditionerdetails";
+			return "edittelevisiondetails";
 		}
 	}
 	

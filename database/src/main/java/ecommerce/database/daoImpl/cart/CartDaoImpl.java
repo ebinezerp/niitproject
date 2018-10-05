@@ -6,6 +6,7 @@ import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 
 import org.hibernate.HibernateException;
+import org.hibernate.ObjectNotFoundException;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -66,7 +67,8 @@ public class CartDaoImpl implements CartDaoService {
 		System.out.println(customerId);
 		try {
 			return (Cart)sessionFactory.getCurrentSession().createQuery("from Cart where customer_customer_id=:id").setParameter("id",customerId).getSingleResult();
-		} catch (HibernateException | NoResultException e) {
+		} catch (HibernateException | NoResultException  e) {
+			
 			// TODO: handle exception
 			return null;	
 		}

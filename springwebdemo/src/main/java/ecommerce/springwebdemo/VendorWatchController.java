@@ -28,7 +28,7 @@ public class VendorWatchController {
 	@Autowired
 	private SaveImage saveImage;
 	
-	@PostMapping("addwatch")
+	@PostMapping("/vendor/addwatch")
 	public String addWatch(@ModelAttribute("watch") Watch watch,HttpSession session,HttpServletRequest request)
 	{
 		watch.setVendor((Vendor)session.getAttribute("vendor"));
@@ -51,14 +51,14 @@ public class VendorWatchController {
 	}
 	
 	
-	@GetMapping("editwatchdetails/{productId}")
+	@GetMapping("/vendor/editwatchdetails/{productId}")
 	public String editProduct(@PathVariable("productId") long productId, Model model) {
 		model.addAttribute("watch",watchDaoService.retrieveWatchById(productId));
 		return "editwatch";
 	}
 	
 
-	@PostMapping("editwatchdetails")
+	@PostMapping("/vendor/editwatchdetails")
 	public String editMobileDetails(@ModelAttribute("watch") Watch watch, HttpServletRequest request) {
 		if (!watch.getImage().isEmpty()) {
 			saveImage.saveImage(watch, request);

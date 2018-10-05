@@ -67,10 +67,42 @@
 				<td><c:out value="${laptop.product_color }"></c:out></td>
 			</tr>
 			<tr>
-				<td><a href="${path }/editmobiledetails/${mobile.productId }"><button
+				<td>Ram</td>
+				<td><c:out value="${laptop.laptop_ram }"></c:out></td>
+			</tr>
+			<tr>
+				<td>rom</td>
+				<td><c:out value="${laptop.laptop_rom }"></c:out></td>
+			</tr>
+			<tr>
+				<td>processor</td>
+				<td><c:out value="${laptop.laptop_processor }"></c:out></td>
+			</tr>
+			<tr>
+				<td>os</td>
+				<td><c:out value="${laptop.laptop_os }"></c:out></td>
+			</tr>
+			<tr>
+				<td>weight</td>
+				<td><c:out value="${laptop.laptop_weight }"></c:out></td>
+			</tr>
+			<tr>
+				<td>size</td>
+				<td><c:out value="${laptop.laptop_size }"></c:out></td>
+			</tr>
+			<tr>
+				<td>graphic card</td>
+				<td><c:out value="${laptop.laptop_graphic_card }"></c:out></td>
+			</tr>
+			<tr>
+				<td>description</td>
+				<td><c:out value="${laptop.laptop_description }"></c:out></td>
+			</tr>
+			<tr>
+				<td><a href="${contextPath }/vendor/editlaptopdetails/${laptop.productId }"><button
 						class="btn btn-success">edit</button></a></td>
 			
-			<td><a href="${path }/deleteproduct/${mobile.productId }"><button
+			<td><a href="${contextPath }/vendor/deleteproduct/${laptop.productId }"><button
 						class="btn btn-danger">delete</button></a></td>	
 			</tr>
 		</tbody>

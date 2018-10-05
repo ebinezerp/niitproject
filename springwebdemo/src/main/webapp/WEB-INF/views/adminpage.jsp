@@ -21,6 +21,7 @@
   } );</script>
 </head>
 <body>
+<c:set value="${pageContext.request.contextPath }" var="contextPath"></c:set>
 <!-- <h1>hiiiiiiiiiiiiiiiii</h1> -->
 <c:set value="${pageContext.request.contextPath}" var="contextPath"></c:set>
 <div><a href="${contextPath }/admin/logout"><button type="button">Logout</button></a></div>
@@ -46,7 +47,7 @@
    <td><c:out value="${vendor.vendor_email}"></c:out></td>
    <td><c:out value="${vendor.vendor_mobile}"></c:out></td>
    <td><c:out value="${vendor.vendor_active}"></c:out></td>
-   <td><a href="accept/${vendor.vendor_id }"><input type="button" value="Activate"></a></td>
+   <td><a href="${contextPath }/admin/accept/${vendor.vendor_id }"><input type="button" value="Activate"></a></td>
   </tr>
   </c:if>
    </c:forEach>
@@ -76,13 +77,13 @@
    <td><c:out value="${vendor.vendor_email}"></c:out></td>
    <td><c:out value="${vendor.vendor_mobile}"></c:out></td>
    <td><c:out value="${vendor.vendor_active}"></c:out></td>
-    <td><a href="reject/${vendor.vendor_id }"><input type="button" value="Deactivate"></a></td>
+    <td><a href="${contextPath }/admin/reject/${vendor.vendor_id }"><input type="button" value="Deactivate"></a></td>
   </tr>
   </c:if>
    </c:forEach>
  </tbody>
  </table>
-hii
+
 
 </body>
 </html>

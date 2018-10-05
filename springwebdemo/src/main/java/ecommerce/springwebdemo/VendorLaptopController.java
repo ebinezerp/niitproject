@@ -36,8 +36,8 @@ public class VendorLaptopController {
 	private ProductDaoService productDaoService;
 	
 	
-	@PostMapping("addlaptop")
-	public String addLaptop(@ModelAttribute("laptop") Laptop laptop,HttpSession session)
+	@PostMapping("/vendor/addlaptop")
+	public String addLaptop(@ModelAttribute("laptop") Laptop laptop,HttpSession session,HttpServletRequest  request)
 	{
 		laptop.setVendor((Vendor)session.getAttribute("vendor"));
 		
@@ -48,6 +48,7 @@ public class VendorLaptopController {
 		
 		if(laptopDaoService.addLaptop(laptop))
 		{			
+			saveImage.saveImage(laptop, request);
 			session.setAttribute("products",productDaoService.getAllProducts((Vendor)session.getAttribute("vendor")));
 			return "redirect:products";
 			
@@ -56,13 +57,13 @@ public class VendorLaptopController {
 		}
 	}
 	
-	@GetMapping("editlaptopdetails/{productId}")
+	@GetMapping("/vendor/editlaptopdetails/{productId}")
 	public String editProduct(@PathVariable("productId") long productId, Model model) {
 		model.addAttribute("laptop",laptopDaoService.retrieveLaptopById(productId));
 		return "editlaptop";
 	}
 	
-	@PostMapping("editlaptopdetails")
+	@PostMapping("/vendor/editlaptopdetails")
 	public String editMobileDetails(@ModelAttribute("laptop") Laptop laptop, HttpServletRequest request) {
 		if (!laptop.getImage().isEmpty()) {
 			saveImage.saveImage(laptop, request);

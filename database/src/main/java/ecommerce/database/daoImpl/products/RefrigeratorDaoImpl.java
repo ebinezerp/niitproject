@@ -6,6 +6,7 @@ import javax.transaction.Transactional;
 
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ecommerce.database.dao.products.RefrigeratorDaoService;
@@ -15,16 +16,15 @@ import ecommerce.database.model.products.Refrigerator;
 @Transactional
 public class RefrigeratorDaoImpl implements RefrigeratorDaoService {
 
+	@Autowired
 	private SessionFactory sessionFactory;
 	
 	@Override
 	public boolean addRefrigerator(Refrigerator refrigerator) {
 		// TODO Auto-generated method stub
-		try {
-			
+		try {			
 			sessionFactory.getCurrentSession().save(refrigerator);
-			return true;
-			
+			return true;			
 		} catch (HibernateException e) {
 			// TODO: handle exception
 			return false;	

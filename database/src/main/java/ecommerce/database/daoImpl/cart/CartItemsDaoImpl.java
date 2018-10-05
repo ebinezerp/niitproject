@@ -62,7 +62,7 @@ public class CartItemsDaoImpl implements CartItemsDaoService {
 		// TODO Auto-generated method stub
 		try {
 			return sessionFactory.getCurrentSession()
-					.createQuery("from CartItems where cart_cart_id=:id", CartItems.class).setParameter("id", cartId)
+					.createQuery("from CartItems where cart_cartId=:id", CartItems.class).setParameter("id", cartId)
 					.list();
 		} catch (HibernateException e) {
 			// TODO: handle exception

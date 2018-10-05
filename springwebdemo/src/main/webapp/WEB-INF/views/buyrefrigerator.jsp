@@ -42,10 +42,9 @@
         </ul>
       
     </nav>
-    
-<div style="display: flex;">
+    <div style="display: flex;">
 <div style="flex:2">
-<img alt="image" style="width:500px" src='<spring:url value="/resources/images/products/${mobile.productId }.jpg"></spring:url>'>
+<img alt="image" style="width:500px" src='<spring:url value="/resources/images/products/${refrigerator.productId }.jpg"></spring:url>'>
 </div>
 <div style="width:500px;flex:2">
 	<table class="table table-bordered table-striped">
@@ -57,59 +56,44 @@
 		<tbody>
 			<tr>
 				<td>Brand</td>
-				<td><c:out value="${mobile.product_brand }"></c:out></td>
+				<td><c:out value="${refrigerator.product_brand }"></c:out></td>
 			</tr>
 			<tr>
 				<td>Model</td>
-				<td><c:out value="${mobile.product_model }"></c:out></td>
+				<td><c:out value="${refrigerator.product_model }"></c:out></td>
 			</tr>
 			<tr>
 				<td>Color</td>
-				<td><c:out value="${mobile.product_color }"></c:out></td>
+				<td><c:out value="${refrigerator.product_color }"></c:out></td>
 			</tr>
 			<tr>
-				<td>Display Size</td>
-				<td><c:out value="${mobile.mobile_display_size }"></c:out></td>
+				<td>capacity</td>
+				<td><c:out value="${refrigerator.refrigerator_capacity }"></c:out></td>
 			</tr>
 			<tr>
-				<td>Operating System</td>
-				<td><c:out value="${mobile.mobile_os }"></c:out></td>
+				<td>doors</td>
+				<td><c:out value="${refrigerator.refrigerator_doors }"></c:out></td>
 			</tr>
 			<tr>
-				<td>4G/LTE</td>
-				<td><c:out value="${mobile.mobile_lte }"></c:out></td>
+				<td>powersavings rating</td>
+				<td><c:out value="${refrigerator.refrigerator_powersavings_rating }"></c:out></td>
 			</tr>
 			<tr>
-				<td>Ram</td>
-				<td><c:out value="${mobile.mobile_ram }"></c:out></td>
-			</tr>
-			<tr>
-				<td>Internal memory</td>
-				<td><c:out value="${mobile.mobile_rom }"></c:out></td>
-			</tr>
-			<tr>
-				<td>Front cam</td>
-				<td><c:out value="${mobile.mobile_frontcam }"></c:out></td>
-			</tr>
-			<tr>
-				<td>Internal memory</td>
-				<td><c:out value="${mobile.mobile_rearcam }"></c:out></td>
-			</tr>
-			<tr>
-				<td>Weight</td>
-				<td><c:out value="${mobile.mobile_weight }"></c:out></td>
-			</tr>
-			<tr>
-				<td>Description</td>
-				<td><c:out value="${mobile.mobile_description}"></c:out></td>
-			</tr>
-			<tr>
-				<td><a href="${contextPath }/vendor/editmobiledetails/${mobile.productId }"><button
-						class="btn btn-success">edit</button></a></td>
+				<td>description</td>
+				<td><c:out value="${refrigerator.refrigerator_description }"></c:out></td>
+			</tr>	
 			
-			<td><a href="${contextPath }/vendor/deleteproduct/${mobile.productId }"><button
-						class="btn btn-danger">delete</button></a></td>	
+			<form action="${contextPath }/customer/addtocart" method="get">
+			<tr>
+			<td>Enter number of products</td>
+			<td><input type="number" name="numberOfProducts"></td>
+			<input type="hidden" name="productId" value="${refrigerator.productId }">
+			</tr>			
+			<tr>
+				<td><input type="submit" value="Submit"></td>
 			</tr>
+			</form>		
+			
 		</tbody>
 
 	</table>
@@ -117,5 +101,6 @@
 </div>
 <div style="flex:2"></div>
 </div>
+
 </body>
 </html>

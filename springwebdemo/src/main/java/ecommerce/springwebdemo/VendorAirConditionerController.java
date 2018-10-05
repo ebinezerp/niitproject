@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -21,6 +22,7 @@ import ecommerce.database.model.Vendor;
 import ecommerce.database.model.products.AirConditioner;
 import ecommerce.database.model.products.Refrigerator;
 
+@Controller
 public class VendorAirConditionerController {
 	
 	@Autowired
@@ -34,7 +36,7 @@ public class VendorAirConditionerController {
 
 
 	
-	@PostMapping("addairconditioner")
+	@PostMapping("/vendor/addairconditioner")
 	public String addRefrigerator(@ModelAttribute("airconditioner")AirConditioner airConditioner,HttpServletRequest request,HttpSession session)
 	{
 		airConditioner.setVendor((Vendor)session.getAttribute("vendor"));
@@ -53,14 +55,14 @@ public class VendorAirConditionerController {
 	}
 
 	
-	@GetMapping("editairconditionerdetails/{productId}")
+	@GetMapping("/vendor/editairconditionerdetails/{productId}")
 	public String editProduct(@PathVariable("productId")long productId, Model model)
 	{
-		model.addAttribute("refrigerator", airConditionerDaoService.retrieveAirConditionerById(productId));
+		model.addAttribute("airconditioner", airConditionerDaoService.retrieveAirConditionerById(productId));
 		return "editairconditioner";
 	}
 	
-	@PostMapping("editairconditionerdetails")
+	@PostMapping("/vendor/editairconditionerdetails")
 	public String editMobileDetails(@ModelAttribute("airconditioner") AirConditioner airConditioner, HttpServletRequest request) {
 		if (!airConditioner.getImage().isEmpty()) {
 			saveImage.saveImage(airConditioner, request);

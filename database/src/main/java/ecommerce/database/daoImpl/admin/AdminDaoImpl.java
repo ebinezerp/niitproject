@@ -69,7 +69,7 @@ public class AdminDaoImpl implements AdminDao{
 		// TODO Auto-generated method stub
 		try {
 			
-	  return sessionFactory.getCurrentSession().createCriteria(Vendor.class).list();
+	  return sessionFactory.getCurrentSession().createQuery("from Vendor").getResultList();
 		}catch (NullPointerException e) {
 			// TODO: handle exception
 			e.printStackTrace();

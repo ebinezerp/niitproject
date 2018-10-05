@@ -43,23 +43,21 @@
 	<!-- vendor security code -->
 
 	<security:http auto-config="true" use-expressions="true"
-		pattern="/vendor/**" authentication-manager-ref="vendorAuthManager">
+		pattern="/vendor/**" authentication-manager-ref="vendorAuthManager" >
 		<security:intercept-url
-			pattern="/vendor/products" access="authenticated" />
-
+			pattern="/vendor/**" access="hasAuthority('vendor')"/>
+<security:intercept-url pattern="/vendor/vendorlogin" access="anonymous"/>
 		<security:form-login login-page="/vendorlogin"
 			login-processing-url="/vendor/login"
 			default-target-url="/vendor/products"
 			username-parameter="vendor_email"
 			password-parameter="vendor_password"
-			authentication-failure-forward-url="/vendorlogin" />
+			authentication-failure-url="/vendorlogin" />
 
-
+<security:logout  logout-url="/vendor/logout" logout-success-url="/index"/>
 		<security:csrf disabled="true" />
 		<security:access-denied-handler
 			error-page="/403" />
-		<security:logout logout-url="/logout"
-			logout-success-url="/index" />
 	</security:http>
 
 	<security:authentication-manager
@@ -81,18 +79,17 @@
 	<security:http auto-config="true" use-expressions="true"
 		pattern="/admin/**" authentication-manager-ref="adminAuthManager">
 		<security:intercept-url
-			pattern="/admin/adminpage" access="authenticated" />
-
+			pattern="/admin/**" access="hasAuthority('admin')" />
+<security:intercept-url pattern="/admin/adminlogin" access="anonymous"/>
 		<security:form-login login-page="/adminlogin"
 			login-processing-url="/admin/adminlogin"
 			default-target-url="/admin/adminpage" username-parameter="email"
 			password-parameter="password"
-			authentication-failure-forward-url="/adminlogin" />
+			authentication-failure-url="/adminlogin" />
+			<security:logout  logout-url="/admin/logout" logout-success-url="/index"/>
 		<security:csrf disabled="true" />
 		<security:access-denied-handler
 			error-page="/403" />
-		<security:logout logout-url="/admin/logout"
-			logout-success-url="/index" />
 	</security:http>
 
 	<security:authentication-manager
@@ -107,25 +104,23 @@
 		</security:authentication-provider>
 	</security:authentication-manager>
 
+<!-- customer security code -->
 	<security:http auto-config="true" use-expressions="true"
 		pattern="/customer/**" authentication-manager-ref="custAuthManager">
 		<security:intercept-url
-			pattern="/customer/buymobile" access="authenticated" />
-
-
-		<!-- customer security code -->
-
+			pattern="/customer/**" access="hasAuthority('customer')" />
+	   <security:intercept-url pattern="/customer/customerlogin" access="anonymous"/>
 		<security:form-login login-page="/customerlogin"
 			login-processing-url="/customer/customerlogin"
 			default-target-url="/index"
 			username-parameter="customer_email"
 			password-parameter="customer_password"
-			authentication-failure-forward-url="/customerlogin" />
+			authentication-failure-url="/customerlogin"/>
+			<security:logout  logout-url="/customer/logout" logout-success-url="/index"/>
 		<security:csrf disabled="true" />
+		
 		<security:access-denied-handler
 			error-page="/403" />
-		<security:logout logout-url="/customer/logout"
-			logout-success-url="/index" />
 	</security:http>
 
 	<security:authentication-manager

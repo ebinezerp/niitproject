@@ -32,7 +32,7 @@ public class VendorMobileController {
      private	SaveImage saveImage;
 
 
-	@PostMapping("addmobile")
+	@PostMapping("/vendor/addmobile")
 	public String addMobile(@ModelAttribute("mobile") Mobile mobile,HttpSession session,HttpServletRequest request)
 	{
 		mobile.setVendor((Vendor)session.getAttribute("vendor"));
@@ -62,7 +62,7 @@ public class VendorMobileController {
 	}
 	
 
-	@PostMapping("editmobiledetails")
+	@PostMapping("/vendor/editmobiledetails")
 	public String editMobileDetails(@ModelAttribute("mobile") Mobile mobile, HttpServletRequest request) {
 		if (!mobile.getImage().isEmpty()) {
 			saveImage.saveImage(mobile, request);

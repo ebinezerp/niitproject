@@ -11,6 +11,7 @@ import java.util.Random;
 import javax.mail.Session;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -18,6 +19,9 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.support.PropertiesBeanDefinitionReader;
 import org.springframework.http.HttpRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -66,29 +70,22 @@ public class IndexController {
 	private MobileDaoService mobileDaoService;
 	
 
-	@GetMapping(value= {"index"})
+	@GetMapping(value= {"index","/"})
 	public ModelAndView indexPage(HttpSession session)
 	{
 		List<Product> tenproducts=productDaoService.getLastTenProducts();
 		System.out.println(tenproducts);
 		session.setAttribute("tenproducts",tenproducts);
-		session.setAttribute("electronics",subCategoryDaoService.getAllSubcategories());
-		
+		session.setAttribute("allsubcategories",subCategoryDaoService.getAllSubcategories());
+		session.setAttribute("electronics",subCategoryDaoService.getSubCategoriesOfElectronics());
+		session.setAttribute("homeappliances",subCategoryDaoService.getSubCategoriesOfHomeAppliances());
+		session.setAttribute("accessories", subCategoryDaoService.getSubCatgoriesOfAccessories());
+		session.setAttribute("fashion",subCategoryDaoService.getSubCategoriesOFFashion());
 		ModelAndView view=new ModelAndView("index");
 		
 		return view;
 	}
 	
-	@RequestMapping(value = { "/", "/welcome" }, method = RequestMethod.GET)
-	public ModelAndView defaultPage() {
-
-	  ModelAndView model = new ModelAndView();
-	  model.addObject("title", "Spring Security Login Form - Database Authentication");
-	  model.addObject("message", "This is default page!");
-	  model.setViewName("hello");
-	  return model;
-
-	}
 
 	/*@RequestMapping(value = "/admin", method = RequestMethod.GET)
 	public ModelAndView adminPage() {
@@ -110,17 +107,7 @@ public class IndexController {
 	
 	
 	
-	@GetMapping("displayproducts/{subCategory_name}")
-	public String displayProducts(@PathVariable("subCategory_name")String subCategory_name,HttpSession session)
-	{
-		switch (subCategory_name) {
-		case "allmobiles":session.setAttribute("mobiles",getSortedMobiles(mobileDaoService.getAllMobiles()));
-		       return "displayAllMobiles";	
-
-		default: return "index";
-		
-		}
-	}
+	
 	
    
     
@@ -135,7 +122,7 @@ public class IndexController {
 		return view;
 	}*/
 	
-	/*
+/*	
 	@PostMapping("vendorlogin")
 	public String vendorLogin(Principal principal)
 	{		
@@ -157,10 +144,10 @@ public class IndexController {
 			 model.addAttribute("message","No Vendor exists with these credentials");
 			 return "redirect:login";
 		 }
-	}*/
+	}
+	*/
 	
-	
-    @RequestMapping(value = "/login",method=RequestMethod.GET)
+/*    @RequestMapping(value = "/login",method=RequestMethod.GET)
     public ModelAndView login(@RequestParam(value = "error",required = false) String error,@RequestParam(value = "logout",required=false)String logout)
     {
     	
@@ -176,12 +163,12 @@ public class IndexController {
     	}
     	model.setViewName("login");
     	return model;
-    }
+    }*/
     
     
     
     
-	@GetMapping("profile")
+	@GetMapping("/vendor/profile")
 	public String displayProfile()
 	{
 		return "profile";
@@ -196,33 +183,17 @@ public class IndexController {
 	
 	
 	
-	@GetMapping("accept/{vendor_id}")
-	public String acceptVendor(@PathVariable("vendor_id")int vendor_id)
-	{
-		Vendor vendor = vendorDaoService.getVendorById(vendor_id);
-		vendor.setVendor_active(true);
-		vendorDaoService.editVendor(vendor);
-		return "redirect:/adminpage";
-	}
-	
-	@GetMapping("reject/{vendor_id}")
-	public String rejectVendor(@PathVariable("vendor_id")int vendor_id)
-	{
-		Vendor vendor=vendorDaoService.getVendorById(vendor_id);
-		vendor.setVendor_active(false);
-		vendorDaoService.editVendor(vendor);
-		return "redirect:/adminpage";		
-	}
 	
 	
-	@GetMapping("editvendor")
+	
+	@GetMapping("/vendor/editvendor")
 	public String editVendor(Model model,HttpSession httpSession)
 	{
 		model.addAttribute("vendor",httpSession.getAttribute("vendor"));
 	    	return "editvendor";
 	}
 	
-	@PostMapping("editvendor")
+	@PostMapping("/vendor/editvendor")
 	public String updateVendor(@ModelAttribute("vendor") Vendor vendor,HttpSession httpSession)
 	{
 		
@@ -232,20 +203,16 @@ public class IndexController {
 		return "profile";
 	}
 	
-	public List<Mobile> getSortedMobiles(List<Mobile> mobiles)
+	/*@GetMapping(value="/logout")
+	public String logoutMethod(HttpServletRequest request,HttpServletResponse response)
 	{
-		List<Mobile> sorted=null;
-		
-		for(Mobile mobile:mobiles)
+		Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
+		if(authentication!=null)
 		{
-			if(mobile.isDeleted()==false)
-			{
-				sorted.add(mobile);
-			}
+			new SecurityContextLogoutHandler().logout(request, response, authentication);
 		}
-		return sorted;
-		
-	}
+		return "index";
+	}*/
 	
 	
 }

@@ -38,6 +38,12 @@ public class Television extends Product{
 	public void setTelevision_description(String television_description) {
 		this.television_description = television_description;
 	}
+	public byte getTelevision_powersavings_rating() {
+		return television_powersavings_rating;
+	}
+	public void setTelevision_powersavings_rating(byte television_powersavings_rating) {
+		this.television_powersavings_rating = television_powersavings_rating;
+	}
 	
 	
 	

@@ -82,7 +82,7 @@
 		</div>		
 		<div class="form-group">
 			<springform:input path="airconditioner_description" class="form-control"
-				placeholder="enter warranty in months"  />
+				placeholder="enter description"  />
 		</div>
 		
 		<div class="form-group">
