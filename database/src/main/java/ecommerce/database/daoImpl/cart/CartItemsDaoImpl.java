@@ -75,7 +75,7 @@ public class CartItemsDaoImpl implements CartItemsDaoService {
 		// TODO Auto-generated method stub
 		try {
 			sessionFactory.getCurrentSession().createQuery("delete from CartItems where cart_cartId=:id")
-					.setParameter("id", cartId);
+					.setParameter("id", cartId).executeUpdate();
 			return true;
 		} catch (HibernateException e) {
 			// TODO: handle exception
@@ -96,6 +96,17 @@ public class CartItemsDaoImpl implements CartItemsDaoService {
 		
 		
 		
+	}
+
+	@Override
+	public CartItems getCartItemByCartItemsId(long cartItemsId) {
+		// TODO Auto-generated method stub
+		try {
+			return 	(CartItems)sessionFactory.getCurrentSession().createQuery("from CartItems where cartItemsId=:id").setParameter("id", cartItemsId).getSingleResult();
+			} catch (HibernateException e) {
+				// TODO: handle exception
+				return null;
+			}
 	}
 
 }

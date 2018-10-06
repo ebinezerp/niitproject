@@ -100,6 +100,17 @@
 				</div>
 			</li>
 			<li class="nav-item">
+			<c:choose>
+			<c:when test="${pageContext.request.authType=='customer'}">
+			<a href="${contextPath }/customer/logout"><button>customerLogout</button></a>
+			</c:when>
+			<c:when test="${pageContext.request.authType=='admin' }">
+			<a href="${contextPath }/admin/logout"><button>adminLogout</button></a>
+			</c:when>
+			<c:when test="${pageContext.request.authType=='vendor' }">
+			<a href="${contextPath }/vendor/logout"><button>vendorLogout</button></a>
+			</c:when>
+			</c:choose>
 			</li>
 		</ul>
 	</div>

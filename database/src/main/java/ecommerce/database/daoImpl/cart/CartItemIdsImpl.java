@@ -59,7 +59,7 @@ public class CartItemIdsImpl implements CartItemIdsDaoService{
 	public boolean deleteAllRelatedCartItemIds(long cartItemsId) {
 		// TODO Auto-generated method stub
 		try {
-			sessionFactory.getCurrentSession().createQuery("delete from CartItemIds where cartItems_cartItemsId=:id").setParameter("id",cartItemsId);
+			sessionFactory.getCurrentSession().createQuery("delete from CartItemIds where cartItems_cartItemsId=:id").setParameter("id",cartItemsId).executeUpdate();
 			return true;
 		} catch (HibernateException e) {
 			// TODO: handle exception

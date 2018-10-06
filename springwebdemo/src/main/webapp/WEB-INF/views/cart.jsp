@@ -19,22 +19,32 @@
 	<table  class="table table-striped table-bordered ">
 	<thead>
 		<tr>
+		    <th>Product</th>
 			<th>Brand</th>
 			<th>Model</th>
 			<th>Price</th>
+			<th>Quantity</th>
+			<th>Increase/Decrease</th>
 		</tr>
 		</thead>
 		<tbody>
-		<c:forEach items="${product }" var="products">
+		<c:forEach items="${product }" var="products" varStatus="status">
 		<tr>
+		<td>${name[status.index]}</td>
 		<td>${products.product_brand }</td>
 		<td>${products.product_model }</td>
-		<td>${products.price }</td>
+		<td>${products.price*cartitem[status.index].getQuantity() }</td>
+		<td>${cartitem[status.index].getQuantity() }</td>
+		<td><a href="${contextPath }/customer/addoneproduct/${cartitem[status.index].cartItemsId}"><button>+1</button></a>
+		<c:if test="${cartitem[status.index].getQuantity()>1 }">
+		<a href="${contextPath }/customer/removeoneproduct/${cartitem[status.index].cartItemsId}"><button>-1</button></a>
+		</c:if>
+		</td>
 		</tr>
 		</c:forEach>
 		</tbody>
 	</table>
-	
-	<a href="${contextPath }/customer/clearcart"><button type="button">ClearCart</button></a>
+<a href="${contextPath }/customer/clearcart"><button type="button">ClearCart</button></a>
+<a href="${contextPath }/index"><button type="button">Buy more</button></a>
 </body>
 </html>

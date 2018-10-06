@@ -9,4 +9,5 @@ public interface NoOfProductsDaoService {
 	public abstract boolean addNumberOFProducts(NumberOfProducts numberOfProducts);
     public abstract List<NumberOfProducts> getNumberOfProducts(long productId);
     public abstract NumberOfProducts getNumberOfProductsByNoOfproductsId(long productNumber);
+    public abstract boolean updateNumberOfProducts(NumberOfProducts numberOfProducts);
 }

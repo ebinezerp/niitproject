@@ -54,4 +54,17 @@ public class NoOfProductsDaoImpl implements NoOfProductsDaoService{
 		}
 	}
 
+	@Override
+	public boolean updateNumberOfProducts(NumberOfProducts numberOfProducts) {
+		// TODO Auto-generated method stub
+		
+		try {
+			sessionFactory.getCurrentSession().update(numberOfProducts);
+			return true;
+		} catch (HibernateException e) {
+			// TODO: handle exception
+		return false;
+		}
+	}
+
 }

@@ -108,7 +108,7 @@
 	<security:http auto-config="true" use-expressions="true"
 		pattern="/customer/**" authentication-manager-ref="custAuthManager">
 		<security:intercept-url
-			pattern="/customer/**" access="hasAuthority('customer')" />
+			pattern="/customer/**"  access="hasAuthority('customer')" />
 	   <security:intercept-url pattern="/customer/customerlogin" access="anonymous"/>
 		<security:form-login login-page="/customerlogin"
 			login-processing-url="/customer/customerlogin"

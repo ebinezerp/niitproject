@@ -70,7 +70,7 @@ public class IndexController {
 	private MobileDaoService mobileDaoService;
 	
 
-	@GetMapping(value= {"index","/"})
+	@GetMapping(value= {"/index","/"})
 	public ModelAndView indexPage(HttpSession session)
 	{
 		List<Product> tenproducts=productDaoService.getLastTenProducts();
