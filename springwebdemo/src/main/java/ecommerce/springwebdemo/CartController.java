@@ -173,13 +173,18 @@ public class CartController {
 	public CartItems checkIfProductAlreadyExists(long productId,Cart cart)
 	{
        List<CartItems> cartItemsList=cart.getCartItemsList();
-       for(CartItems c:cartItemsList)
-       {
-    	   if(c.getCartItemIdsList().get(0).getNumberOfProducts().getProduct().getProductId()==productId)
-    	   {
-    		   return c;
-    	   }
-       }
+       try {
+    	   for(CartItems c:cartItemsList)
+           {
+        	   if(c.getCartItemIdsList().get(0).getNumberOfProducts().getProduct().getProductId()==productId)
+        	   {
+        		   return c;
+        	   }
+           }
+	} catch (IndexOutOfBoundsException e) {
+		// TODO: handle exception
+		return null;
+	}
        return null;
 	}
 	
@@ -203,21 +208,34 @@ public class CartController {
 		List<Product> products=new ArrayList<Product>();
 		List<CartItems> cartItems=new ArrayList<CartItems>();
 		cartItems=cartItemsDaoService.getCartItemsByCartId(cart.getCartId());
-		List<CartItemIds> cartItemIds=new ArrayList<CartItemIds>();
+		List<CartItemIds> cartItemIdsList=new ArrayList<CartItemIds>();
 		
 		List<String> subcategoryname=new ArrayList<String>();
-		
+		try {
 		for(CartItems items:cartItems)
 		{
-			cartItemIds=cartItemIdsDaoService.getAllRelatedCartItemIds(items.getCartItemsId());
-			products.add(cartItemIds.get(0).getNumberOfProducts().getProduct());
-		    subcategoryname.add(cartItemIds.get(0).getNumberOfProducts().getProduct().getSubCategory().getSubCategory_name());
+			cartItemIdsList=cartItemIdsDaoService.getAllRelatedCartItemIds(items.getCartItemsId());
+			
+				products.add(cartItemIdsList.get(0).getNumberOfProducts().getProduct());
+			
+		    subcategoryname.add(cartItemIdsList.get(0).getNumberOfProducts().getProduct().getSubCategory().getSubCategory_name());
 		}
+		} catch (IndexOutOfBoundsException e) {
+			// TODO: handle exception
+			model.addAttribute("product",products);
+			model.addAttribute("name",subcategoryname);
+			model.addAttribute("cartitem",cartItems);
+		    model.addAttribute("customerId",customer.getCustomer_id());
+			return "cart";
+		
+		}
+		
+		
 				
 		model.addAttribute("product",products);
 		model.addAttribute("name",subcategoryname);
 		model.addAttribute("cartitem",cartItems);
-	
+	    model.addAttribute("customerId",customer.getCustomer_id());
 		return "cart";
 	}
 	
@@ -272,6 +290,34 @@ public class CartController {
         	return "redirect:/customer/cart";
         }
          
+	}
+	
+	@GetMapping("/customer/removecompleteproduct/{cartItemsId}")
+	public String deleteCompleteProductFromCart(@PathVariable("cartItemsId")long cartItemsId)
+	{
+		cartItems=cartItemsDaoService.getCartItemByCartItemsId(cartItemsId);
+		List<CartItemIds> cartItemIdsList=cartItems.getCartItemIdsList();
+	      int unitprice=cartItemIdsList.get(0).getNumberOfProducts().getProduct().getPrice();
+	      Cart cart=cartItems.getCart();
+	      List<CartItems> cartItemsList=cart.getCartItemsList();
+	      int position=cartItemsList.indexOf(cartItems);
+	      for(int i=0;i<cartItemIdsList.size();i++)
+	      {
+	    	  numberOfProducts=cartItemIdsList.get(i).getNumberOfProducts();
+	    	  numberOfProducts.setBought(false);
+	    	  noOfProductsDaoService.updateNumberOfProducts(numberOfProducts);
+	    	  cart.setNoOfItems(cart.getNoOfItems()-1);
+	    	  cart.setNetPrice(cart.getNetPrice()-unitprice);
+	      }    
+	      cartItemsList.remove(position);
+	      cart.setCartItemsList(cartItemsList);
+	      if(cartDaoService.updateCart(cart)==true)
+	      {
+	    	  return "redirect:/customer/cart";
+	      }else {
+	    	  return "redirect:/customer/cart";
+	      }
+		
 	}
 	
 	public boolean updatingNumberOfProductsInCartItems(long productId,int quantity,int unitprice,CartItems cartItems)

@@ -13,4 +13,5 @@ public interface CartItemsDaoService {
 	public abstract boolean deleteAllRelatedCartItems(long cartId);
 	public abstract  CartItems getCartItemByCartId(long cartId);
 	public abstract CartItems getCartItemByCartItemsId(long cartItemsId);
+	public abstract boolean deleteCartItemsByCartItemsId(long cartItemsId);
 }

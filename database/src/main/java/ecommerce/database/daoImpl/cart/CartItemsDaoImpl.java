@@ -109,4 +109,17 @@ public class CartItemsDaoImpl implements CartItemsDaoService {
 			}
 	}
 
+	@Override
+	public boolean deleteCartItemsByCartItemsId(long cartItemsId) {
+		// TODO Auto-generated method stub
+		try {
+			sessionFactory.getCurrentSession().createQuery("delete from CartItems where cartItemsId=:id").setParameter("id",cartItemsId).executeUpdate();
+			return true;
+		} catch (HibernateException e) {
+			// TODO: handle exception
+			return false;
+		}
+		
+	}
+
 }

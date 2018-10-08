@@ -39,6 +39,7 @@
 		<c:if test="${cartitem[status.index].getQuantity()>1 }">
 		<a href="${contextPath }/customer/removeoneproduct/${cartitem[status.index].cartItemsId}"><button>-1</button></a>
 		</c:if>
+		<a href="${contextPath }/customer/removecompleteproduct/${cartitem[status.index].cartItemsId}"><button class="btn btn-danger">X</button></a>
 		</td>
 		</tr>
 		</c:forEach>
@@ -46,5 +47,6 @@
 	</table>
 <a href="${contextPath }/customer/clearcart"><button type="button">ClearCart</button></a>
 <a href="${contextPath }/index"><button type="button">Buy more</button></a>
+<a href="${contextPath }/customer/placeorder/${customerId}"><button type="button">Place Order</button></a>
 </body>
 </html>
