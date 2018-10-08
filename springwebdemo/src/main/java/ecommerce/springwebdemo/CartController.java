@@ -308,15 +308,18 @@ public class CartController {
 	    	  noOfProductsDaoService.updateNumberOfProducts(numberOfProducts);
 	    	  cart.setNoOfItems(cart.getNoOfItems()-1);
 	    	  cart.setNetPrice(cart.getNetPrice()-unitprice);
-	      }    
-	      cartItemsList.remove(position);
-	      cart.setCartItemsList(cartItemsList);
-	      if(cartDaoService.updateCart(cart)==true)
+	      }  
+		
+		cart.setCartItemsList(cartItemsList);
+	       if(cartDaoService.updateCart(cart)==true)
 	      {
+	          cartItemsList.remove(position);   
 	    	  return "redirect:/customer/cart";
 	      }else {
 	    	  return "redirect:/customer/cart";
 	      }
+	      
+	      
 		
 	}
 	
